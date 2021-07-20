@@ -1,1 +1,3 @@
-*.ts
+header.ts
+
+api/*.ts

@@ -5,7 +5,7 @@
         "version": "3.0",
         "description": "A library for working with sound.",
         "icon": "icon.png",
-        "api":"CoreEngine"
+        "api": "CoreEngine"
     },
     "resources": [],
     "sources": [
@@ -17,7 +17,7 @@
         },
         {
             "source": "src/lib",
-            "target": "lib/SoundAPI.js",
+            "target": "SoundAPI.js",
             "type": "library",
             "language": "typescript"
         },
@@ -31,8 +31,12 @@
     "compile": [],
     "additional": [
         {
-            "source": "root/*",
+            "source": "assets/root/*",
             "targetDir": "."
+        },
+        {
+            "source": "assets/sounds/*",
+            "targetDir": "sounds"
         }
     ]
 }
