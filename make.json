@@ -1,0 +1,38 @@
+{
+    "info": {
+        "name": "SoundAPI Demo",
+        "author": "WolfTeam",
+        "version": "3.0",
+        "description": "A library for working with sound.",
+        "icon": "icon.png",
+        "api":"CoreEngine"
+    },
+    "resources": [],
+    "sources": [
+        {
+            "source": "src/dev",
+            "target": "main.js",
+            "type": "main",
+            "language": "typescript"
+        },
+        {
+            "source": "src/lib",
+            "target": "lib/SoundAPI.js",
+            "type": "library",
+            "language": "typescript"
+        },
+        {
+            "source": "src/launch",
+            "type": "launcher",
+            "target": "launch.js",
+            "language": "typescript"
+        }
+    ],
+    "compile": [],
+    "additional": [
+        {
+            "source": "root/*",
+            "targetDir": "."
+        }
+    ]
+}
