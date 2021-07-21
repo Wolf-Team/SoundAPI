@@ -70,8 +70,10 @@ namespace SoundAPI {
             this.list[sid] = this.soundPool.load(path, priority);
         }
 
-        public play(sid: string) {
-            return new SoundPlayer(this.soundPool, this.soundPool.play(this.list[sid], 1, 1, 0, 0, 1));
+        public play(sid: string, loop: number = 0) {
+            return new SoundPlayer(this.soundPool,
+                this.soundPool.play(this.list[sid], 1, 1, 0, loop, 1)
+            );
         }
 
         public pause() {

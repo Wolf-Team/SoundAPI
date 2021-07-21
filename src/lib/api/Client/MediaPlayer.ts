@@ -20,6 +20,7 @@ namespace SoundAPI {
 
         protected media = new jMediaPlayer();
         protected path: string = null;
+        protected sid: string = null;
         protected setSource(src: string) {
             this.media.reset();
             this.path = src;
@@ -34,22 +35,34 @@ namespace SoundAPI {
             if (this.attach == Attach.PLAYER)
                 this.media.setVolume(volume, volume);
         }
+        public getVolume() {
+            return this.volume;
+        }
 
         public play(sid?: string): void {
-            if (sid)
+            if (sid) {
+                this.sid = sid;
                 this.setSource(MediaPlayer.get(sid));
+            }
 
             if (this.path === null)
                 throw new Error("Sourse not set");
 
             this.media.start();
+            super.play();
         }
         public pause(): void {
             this.media.pause();
+            super.pause();
         }
         public stop(): void {
             this.media.stop();
             this.media.prepare();
+            super.stop();
+        }
+
+        public getSid() {
+            return this.sid;
         }
 
         public release() {
