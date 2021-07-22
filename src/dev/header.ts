@@ -50,6 +50,7 @@ Callback.addCallback("tick", () => {
             position: Player.getPosition(),
             dimension: Player.getDimension()
         }, 5);
+        player.init();
     }
 });
 
@@ -65,5 +66,6 @@ Callback.addCallback("ItemUse", () => {
             player.pause();
             break;
     }
-
 })
+
+Callback.addCallback("LevelLeft", () => player.destroy());

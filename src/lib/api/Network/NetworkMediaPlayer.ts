@@ -72,6 +72,7 @@ namespace SoundAPI {
 
         protected entity: NetworkEntity;
         protected player: MediaPlayerInfo;
+        protected remove: boolean = false;
 
         constructor(world: WorldSource, radius?: number);
         constructor(entity: number, radius?: number);
@@ -126,6 +127,7 @@ namespace SoundAPI {
         }
         public destroy() {
             this.entity.remove();
+            this.remove = true;
         }
         protected update() {
             this.tick();
