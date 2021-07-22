@@ -55,6 +55,8 @@ namespace SoundAPI {
         }
         public attachToPlayer(): void {
             this.attach = Attach.PLAYER;
+            if (World.isWorldLoaded())
+                this.entity = IC.Player.get();
         }
 
         public getAttach() { return this.attach; }
@@ -72,13 +74,10 @@ namespace SoundAPI {
         protected abstract tick(): void;
 
         private update(): void {
-            if (this.attach == Attach.PLAYER)
-                return <null>(this.remove = true);
-
             this.tick();
         };
 
-        protected registerUpdatable() {
+        public registerUpdatable() {
             Updatable.addLocalUpdatable(<any>this);
         }
     }

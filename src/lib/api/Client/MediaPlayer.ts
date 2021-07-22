@@ -66,6 +66,7 @@ namespace SoundAPI {
         }
 
         public release() {
+            this.stop();
             this.media.release();
         }
 
