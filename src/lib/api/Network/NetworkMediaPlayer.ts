@@ -61,8 +61,10 @@ namespace SoundAPI {
                     player.attachToCoord(info.position, info.dimension, info.radius);
                     break;
             }
+            if (info.sid)
+                player.setSid(info.sid);
             if (info.state == PlayerState.PLAY)
-                player.play(info.sid);
+                player.play();
 
             return player;
         }
