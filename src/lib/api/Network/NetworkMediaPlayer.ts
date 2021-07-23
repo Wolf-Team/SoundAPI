@@ -1,11 +1,6 @@
 /// <reference path="NetworkPlayer.ts" />
 
 namespace SoundAPI {
-    export interface WorldSource {
-        position: Vector,
-        dimension: number
-    }
-
     interface MediaPlayerInfo {
         attach: Attach,
         position?: Vector,
