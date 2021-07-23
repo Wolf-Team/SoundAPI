@@ -15,7 +15,7 @@ namespace SoundAPI {
     }
 
     type MediaPlayerEntityType = NetworkEntityType<MediaPlayerInfo, MediaPlayerInfo, MediaPlayer>;
-    export class NetworkMediaPlayer {
+    export class NetworkMediaPlayer extends Utils.Updatable {
         protected static entityType: MediaPlayerEntityType = (() => {
             const type: MediaPlayerEntityType = new NetworkEntityType("network_media_player");
             type.setClientListSetupListener((list, target, entity) => {
@@ -77,6 +77,7 @@ namespace SoundAPI {
         constructor(world: WorldSource, radius?: number);
         constructor(entity: number, radius?: number);
         constructor(source: WorldSource | number, radius: number = 5) {
+            super();
             this.player = {
                 attach: typeof source == "number" ? Attach.ENTITY : Attach.COORDS,
                 dimension: typeof source == "number" ? Entity.getDimension(source) : source.dimension,
@@ -120,20 +121,17 @@ namespace SoundAPI {
         public init() {
             this.entity = new NetworkEntity<MediaPlayerInfo>(NetworkMediaPlayer.entityType, this.player);
         }
-        public tick() {
-            const coords = this.getPosition();
-            this.entity.getClients().
-                setupDistancePolicy(coords.x, coords.y, coords.z, this.getDimension(), this.player.radius);
-        }
         public destroy() {
             this.entity.remove();
             this.remove = true;
         }
         protected update() {
-            this.tick();
+            const coords = this.getPosition();
+            this.entity.getClients().
+                setupDistancePolicy(coords.x, coords.y, coords.z, this.getDimension(), this.player.radius);
         }
         public registerUpdatable() {
-            Updatable.addUpdatable(<any>this);
+            this.addServerUpdatable();
         }
     }
 }
