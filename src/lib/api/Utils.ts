@@ -18,7 +18,8 @@ namespace SoundAPI.Utils {
         public getUpdatable(): globalThis.Updatable {
             const _this = this;
             return {
-                update: () => {
+                remove: false,
+                update: function () {
                     _this.update();
                     this.remove = _this.remove;
                 }
