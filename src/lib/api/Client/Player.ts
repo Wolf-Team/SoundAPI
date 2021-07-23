@@ -5,7 +5,7 @@ namespace SoundAPI {
 
     export const MIN_RADUIS = 2;
 
-    export abstract class Player {
+    export abstract class Player extends Utils.Updatable {
         protected attach: Attach = Attach.PLAYER;
         protected entity: number = 0;
         protected coords: Vector = { x: 0, y: 0, z: 0 };
@@ -70,15 +70,14 @@ namespace SoundAPI {
         public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
 
         //Updatable
-        protected remove: boolean = false;
         protected abstract tick(): void;
 
-        private update(): void {
+        protected update(): void {
             this.tick();
         };
 
         public registerUpdatable() {
-            Updatable.addLocalUpdatable(<any>this);
+            this.addClientUpdatable();
         }
     }
 }
