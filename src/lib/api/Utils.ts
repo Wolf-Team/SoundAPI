@@ -7,6 +7,10 @@ namespace SoundAPI.Utils {
         return { left: 1, right: 1 };
     }
 
+    export function inWorld() {
+        return World.isWorldLoaded() || Network.inRemoteWorld();
+    }
+
     export abstract class Updatable {
         protected remove: boolean = false;
         protected abstract update(): void;

@@ -33,7 +33,7 @@ namespace SoundAPI {
         public getVolume(): number { return this.volume; };
 
         public attachToCoord(pos: Vector, dimension: number, radius: number = 5): void {
-            if (!World.isWorldLoaded())
+            if (!Utils.inWorld())
                 throw new Error("You can attach the Player to the coordinates only in the world.");
 
             this.attach = Attach.COORDS;
@@ -43,7 +43,7 @@ namespace SoundAPI {
             this.registerUpdatable();
         }
         public attachToEntity(ent: number, radius: number = 5): void {
-            if (!World.isWorldLoaded())
+            if (!Utils.inWorld())
                 throw new Error("You can attach the Player to an entity only in the world.");
 
             if (ent == IC.Player.get()) return this.attachToPlayer();

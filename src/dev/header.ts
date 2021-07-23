@@ -69,3 +69,7 @@ Callback.addCallback("ItemUse", () => {
 })
 
 Callback.addCallback("LevelLeft", () => player.destroy());
+
+Callback.addCallback("ItemUseLocalServer", function (coords, item, block, player) {
+    alert(World.isWorldLoaded());
+})
