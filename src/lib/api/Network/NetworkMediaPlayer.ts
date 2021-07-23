@@ -11,18 +11,26 @@ namespace SoundAPI {
         state: PlayerState
     }
 
-    type MediaPlayerEntityType = NetworkEntityType<MediaPlayerInfo, MediaPlayerInfo, MediaPlayer>;
-    export class NetworkMediaPlayer extends NetworkPlayer<MediaPlayerInfo, MediaPlayer> {
+    type MediaPlayerEntityType = NetworkEntityType<NetworkMediaPlayer, MediaPlayerInfo, MediaPlayer>;
+    export class NetworkMediaPlayer extends NetworkPlayer<MediaPlayerInfo> {
         protected static entityType: MediaPlayerEntityType = (() => {
             const type: MediaPlayerEntityType = new NetworkEntityType("network_media_player");
             type.setClientListSetupListener((list, target, entity) => {
                 //target = From new NetworkEntity(type, target)
-                const coords = target.position;
-                list.setupDistancePolicy(coords.x, coords.y, coords.z, target.dimension, target.radius);
+                const coords = target.getPosition();
+                list.setupDistancePolicy(coords.x, coords.y, coords.z, target.getDimension(), target.getRadius());
             });
             type.setClientAddPacketFactory((target, entity, client): MediaPlayerInfo => {
                 //target = From new NetworkEntity(type, target)
-                return target;
+                return {
+                    attach: target.getAttach(),
+                    position: target.getPosition(),
+                    entity: target.getEntity(),
+                    dimension: target.getDimension(),
+                    radius: target.getRadius(),
+                    sid: target.getSid(),
+                    state: target.getState()
+                };
             });
             type.setClientEntityRemovedListener((target, entity) => {
                 //target = From setClientEntityAddedListener((...) => target)
@@ -96,15 +104,7 @@ namespace SoundAPI {
         }
 
         protected getNetworkEntity() {
-            return new NetworkEntity<MediaPlayerInfo>(NetworkMediaPlayer.entityType, {
-                attach: this.getAttach(),
-                position: this.getPosition(),
-                entity: this.getEntity(),
-                dimension: this.getDimension(),
-                radius: this.getRadius(),
-                sid: this.getSid(),
-                state: this.getState()
-            });
+            return new NetworkEntity<NetworkMediaPlayer>(NetworkMediaPlayer.entityType, this);
         }
     }
 }

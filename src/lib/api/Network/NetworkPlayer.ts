@@ -1,10 +1,10 @@
 namespace SoundAPI {
-    export abstract class NetworkPlayer<Server, Client> extends Player {
     export interface WorldSource {
         position: Vector,
         dimension: number
     }
 
+    export abstract class NetworkPlayer<Server> extends Player {
         protected nEntity: NetworkEntity<Server>;
 
         constructor(world: WorldSource, radius?: number);
