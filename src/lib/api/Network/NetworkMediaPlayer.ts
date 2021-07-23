@@ -38,15 +38,15 @@ namespace SoundAPI {
                 return player;
             });
 
-            type.addClientPacketListener<string>("play", (target, e, sid) => {
-                target.play(sid);
+            type.addClientPacketListener<{ sid: string }>("play", (target, e, packet) => {
+                target.play(packet.sid);
             });
 
-            type.addClientPacketListener<string>("pause", (target) => {
+            type.addClientPacketListener<{}>("pause", (target) => {
                 target.pause();
             });
 
-            type.addClientPacketListener<string>("stop", (target) => {
+            type.addClientPacketListener<{}>("stop", (target) => {
                 target.stop();
             });
 
@@ -103,16 +103,16 @@ namespace SoundAPI {
         }
 
         public play(sid?: string) {
-            this.entity.send<string>("play", sid);
+            this.entity.send<{ sid: string }>("play", { sid });
             this.player.state = PlayerState.PLAY;
         }
 
         public pause() {
-            this.entity.send<null>("pause", null);
+            this.entity.send<{}>("pause", {});
             this.player.state = PlayerState.PAUSE;
         }
         public stop() {
-            this.entity.send<null>("stop", null);
+            this.entity.send<{}>("stop", {});
             this.player.state = PlayerState.STOP;
         }
 
