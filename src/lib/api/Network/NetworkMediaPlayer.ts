@@ -1,3 +1,5 @@
+/// <reference path="NetworkPlayer.ts" />
+
 namespace SoundAPI {
     export interface WorldSource {
         position: Vector,
@@ -15,7 +17,7 @@ namespace SoundAPI {
     }
 
     type MediaPlayerEntityType = NetworkEntityType<MediaPlayerInfo, MediaPlayerInfo, MediaPlayer>;
-    export class NetworkMediaPlayer extends Utils.Updatable {
+    export class NetworkMediaPlayer extends NetworkPlayer<MediaPlayerInfo, MediaPlayer> {
         protected static entityType: MediaPlayerEntityType = (() => {
             const type: MediaPlayerEntityType = new NetworkEntityType("network_media_player");
             type.setClientListSetupListener((list, target, entity) => {
@@ -70,68 +72,42 @@ namespace SoundAPI {
             return player;
         }
 
-        protected entity: NetworkEntity;
-        protected player: MediaPlayerInfo;
         protected remove: boolean = false;
+        protected sid: string = null;
 
-        constructor(world: WorldSource, radius?: number);
-        constructor(entity: number, radius?: number);
-        constructor(source: WorldSource | number, radius: number = 5) {
-            super();
-            this.player = {
-                attach: typeof source == "number" ? Attach.ENTITY : Attach.COORDS,
-                dimension: typeof source == "number" ? Entity.getDimension(source) : source.dimension,
-                radius: radius,
-                sid: null,
-                state: PlayerState.STOP
-            };
-
-            if (typeof source == "number")
-                this.player.entity = source;
-            else
-                this.player.position = source.position;
-
-        }
-
-        public getPosition() {
-            return this.player.attach == Attach.ENTITY ? Entity.getPosition(this.player.entity) : this.player.position;
-        }
-        public getDimension() {
-            return this.player.attach == Attach.ENTITY ? Entity.getDimension(this.player.entity) : this.player.dimension;
-        }
-        public getState() {
-            return this.player.state;
+        public getSid() {
+            return this.sid;
         }
 
         public play(sid?: string) {
-            this.entity.send<{ sid: string }>("play", { sid });
-            this.player.state = PlayerState.PLAY;
+            if (sid)
+                this.sid = sid
+            else if (this.sid === null)
+                throw new Error("Sourse not set");
+
+            this.nEntity.send<{ sid: string }>("play", { sid });
+            super.play();
         }
 
         public pause() {
-            this.entity.send<{}>("pause", {});
-            this.player.state = PlayerState.PAUSE;
+            this.nEntity.send<{}>("pause", {});
+            super.pause();
         }
         public stop() {
-            this.entity.send<{}>("stop", {});
-            this.player.state = PlayerState.STOP;
+            this.nEntity.send<{}>("stop", {});
+            super.stop();
         }
 
-
-        public init() {
-            this.entity = new NetworkEntity<MediaPlayerInfo>(NetworkMediaPlayer.entityType, this.player);
-        }
-        public destroy() {
-            this.entity.remove();
-            this.remove = true;
-        }
-        protected update() {
-            const coords = this.getPosition();
-            this.entity.getClients().
-                setupDistancePolicy(coords.x, coords.y, coords.z, this.getDimension(), this.player.radius);
-        }
-        public registerUpdatable() {
-            this.addServerUpdatable();
+        protected getNetworkEntity() {
+            return new NetworkEntity<MediaPlayerInfo>(NetworkMediaPlayer.entityType, {
+                attach: this.getAttach(),
+                position: this.getPosition(),
+                entity: this.getEntity(),
+                dimension: this.getDimension(),
+                radius: this.getRadius(),
+                sid: this.getSid(),
+                state: this.getState()
+            });
         }
     }
 }

@@ -70,7 +70,7 @@ namespace SoundAPI {
         public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
 
         //Updatable
-        protected abstract tick(): void;
+        protected tick(): void { };
 
         protected update(): void {
             this.tick();
