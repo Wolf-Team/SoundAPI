@@ -20,8 +20,10 @@ namespace SoundAPI.Utils {
             return {
                 remove: false,
                 update: function () {
+                    if (_this.remove)
+                        return <null>(this.remove = _this.remove);
+
                     _this.update();
-                    this.remove = _this.remove;
                 }
             }
         }
