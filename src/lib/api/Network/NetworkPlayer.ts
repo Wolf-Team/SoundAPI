@@ -24,9 +24,12 @@ namespace SoundAPI {
             this.nEntity = this.getNetworkEntity();
         }
         protected update() {
-            const coords = this.getPosition();
-            this.nEntity.getClients().
-                setupDistancePolicy(coords.x, coords.y, coords.z, this.getDimension(), this.radius);
+            if (this.getAttach() == Attach.ENTITY) {
+                const coords = this.getPosition();
+                this.nEntity.getClients().
+                    setupDistancePolicy(coords.x, coords.y, coords.z, this.getDimension(), this.radius);
+            }
+            this.tick();
         }
 
         public destroy() {
