@@ -40,10 +40,8 @@ namespace SoundAPI {
         }
 
         public play(sid?: string): void {
-            if (sid) {
-                this.sid = sid;
-                this.setSource(MediaPlayer.get(sid));
-            }
+            if (sid)
+                this.setSid(sid);
 
             if (this.path === null)
                 throw new Error("Sourse not set");
@@ -63,6 +61,10 @@ namespace SoundAPI {
 
         public getSid() {
             return this.sid;
+        }
+        public setSid(sid: string) {
+            this.sid = sid;
+            this.setSource(MediaPlayer.get(sid));
         }
 
         public release() {
