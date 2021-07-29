@@ -32,8 +32,8 @@ namespace Utils {
 
     export function getVolume(volume: Volume, radius: number, sourcePosition: Vector, listenerPosition: Vector): Volume {
         radius -= MIN_RADUIS;
-        const distance = Vector.getDistance(sourcePosition, listenerPosition) - MIN_RADUIS;
-        const dVolume = distance / radius;
+        const distance = Math.max(0, Vector.getDistance(sourcePosition, listenerPosition) - MIN_RADUIS);
+        const dVolume = 1 - (distance / radius);
         return { left: volume.left * dVolume, right: volume.right * dVolume };
     }
 
