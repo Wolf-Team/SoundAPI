@@ -28,13 +28,6 @@ class MediaPlayer extends SoundAPI.Player {
         this.media.prepare();
     }
 
-    public setVolume(volume: number) {
-        super.setVolume(volume);
-    }
-    public getVolume() {
-        return this.volume;
-    }
-
     public play(sid?: string) {
         if (sid)
             this.setSid(sid);
