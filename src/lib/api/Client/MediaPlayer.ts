@@ -66,7 +66,7 @@ class MediaPlayer extends SoundAPI.Player {
     }
 
     protected tick(): void {
-        const volume = Utils.getMusicVolume(this.getVolume());
+        const volume = Utils.getVolume(Utils.getMusicVolume(this.getVolume()), this.getRadius(), this.getPosition(), Player.getPosition());
         this.media.setVolume(volume.left, volume.right);
     }
 }

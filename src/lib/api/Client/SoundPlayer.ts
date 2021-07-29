@@ -49,7 +49,7 @@ class SoundPlayer extends SoundAPI.Player {
                 return <null>this.stop();
         }
 
-        const volume = Utils.getSoundVolume(this.getVolume());
+        const volume = Utils.getVolume(Utils.getSoundVolume(this.getVolume()), this.getRadius(), this.getPosition(), Player.getPosition());
         this.soundPool.setVolume(this.streamId, volume.left, volume.right);
     }
 }
