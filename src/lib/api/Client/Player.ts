@@ -5,8 +5,6 @@ enum Attach { PLAYER, ENTITY, COORDS };
 
 enum PlayerState { PLAY, PAUSE, STOP };
 
-const MIN_RADUIS = 2;
-
 namespace SoundAPI {
     export abstract class Player extends Utils.Updatable {
         protected attach: Attach = Attach.PLAYER;

@@ -24,3 +24,5 @@ const AudioAttributes = android.media.AudioAttributes;
 const AudioManager = android.media.AudioManager;
 
 const IC = this;
+
+const MIN_RADUIS = 2;
