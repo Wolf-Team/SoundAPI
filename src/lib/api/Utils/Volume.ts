@@ -31,14 +31,19 @@ namespace Utils {
         right: number;
     }
 
-    export function getVolume(volume: number) {
-        return { left: volume, right: volume };
+    export function getVolume(volume: Volume, radius: number, sourcePosition: Vector, listenerPosition: Vector): Volume {
+        radius -= MIN_RADUIS;
+        const distance = Vector.getDistance(sourcePosition, listenerPosition) - MIN_RADUIS;
+        const dVolume = distance / radius;
+        return { left: volume.left * dVolume, right: volume.right * dVolume };
     }
 
-    export function getMusicVolume(volumePlayer: number) {
-        return getVolume(Volume.getMusicVolume() * volumePlayer);
+    export function getMusicVolume(volumePlayer: number): Volume {
+        const volume = Volume.getMusicVolume() * volumePlayer;
+        return { left: volume, right: volume };
     }
     export function getSoundVolume(volumePlayer: number): Volume {
-        return getVolume(Volume.getSoundVolume() * volumePlayer);
+        const volume = Volume.getSoundVolume() * volumePlayer;
+        return { left: volume, right: volume };
     }
 }
