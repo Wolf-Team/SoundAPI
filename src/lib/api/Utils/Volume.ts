@@ -9,7 +9,6 @@ namespace Utils {
             const GlobalVolume = parseFloat(settings["audio_main"]);
             SoundVolume = parseFloat(settings['audio_sound']) * GlobalVolume;
             MusicVolume = parseFloat(settings['audio_music']) * GlobalVolume;
-            alert(`reset: ${SoundVolume} | ${MusicVolume}`);
         }
         resetMCPEVolume();
 
