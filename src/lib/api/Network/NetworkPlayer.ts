@@ -20,24 +20,28 @@ namespace SoundAPI {
         }
 
         protected abstract getNetworkEntity(): NetworkEntity<Server>;
+
         public init() {
             this.nEntity = this.getNetworkEntity();
         }
-        protected update() {
+        protected update(time: number) {
             if (this.getAttach() == Attach.ENTITY) {
                 const coords = this.getPosition();
                 this.nEntity.getClients().
                     setupDistancePolicy(coords.x, coords.y, coords.z, this.getDimension(), this.radius);
             }
-            this.tick();
+            this.tick(time);
         }
 
         public destroy() {
             this.nEntity.remove();
             this.remove = true;
         }
-        public registerUpdatable() {
+        public registerUpdatable(): this {
             this.addServerUpdatable();
+            return this;
         }
     }
+
+    // NetworkPlayer.init();
 }

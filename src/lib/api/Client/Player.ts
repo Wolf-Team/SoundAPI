@@ -1,10 +1,13 @@
+/// <reference path="../Utils/Updatable.ts" />
+
+
+enum Attach { PLAYER, ENTITY, COORDS };
+
+enum PlayerState { PLAY, PAUSE, STOP };
+
+const MIN_RADUIS = 2;
+
 namespace SoundAPI {
-    export enum Attach { PLAYER, ENTITY, COORDS };
-
-    export enum PlayerState { PLAY, PAUSE, STOP };
-
-    export const MIN_RADUIS = 2;
-
     export abstract class Player extends Utils.Updatable {
         protected attach: Attach = Attach.PLAYER;
         protected entity: number = 0;
@@ -15,14 +18,17 @@ namespace SoundAPI {
         protected state: PlayerState = PlayerState.STOP;
 
 
-        public play(): void {
+        public play(): this {
             this.state = PlayerState.PLAY;
+            return this;
         }
-        public pause(): void {
+        public pause(): this {
             this.state = PlayerState.PAUSE;
+            return this;
         }
-        public stop(): void {
+        public stop(): this {
             this.state = PlayerState.STOP;
+            return this;
         }
 
         public getState() {
@@ -32,7 +38,7 @@ namespace SoundAPI {
         public setVolume(volume: number): void { this.volume = volume; };
         public getVolume(): number { return this.volume; };
 
-        public attachToCoord(pos: Vector, dimension: number, radius: number = 5): void {
+        public attachToCoord(pos: Vector, dimension: number, radius: number = 5): this {
             if (!Utils.inWorld())
                 throw new Error("You can attach the Player to the coordinates only in the world.");
 
@@ -41,8 +47,9 @@ namespace SoundAPI {
             this.dimension = dimension;
             this.radius = radius;
             this.registerUpdatable();
+            return this;
         }
-        public attachToEntity(ent: number, radius: number = 5): void {
+        public attachToEntity(ent: number, radius: number = 5): this {
             if (!Utils.inWorld())
                 throw new Error("You can attach the Player to an entity only in the world.");
 
@@ -52,11 +59,14 @@ namespace SoundAPI {
             this.entity = ent;
             this.radius = radius;
             this.registerUpdatable();
+            return this;
         }
-        public attachToPlayer(): void {
+        public attachToPlayer(): this {
             this.attach = Attach.PLAYER;
             if (World.isWorldLoaded())
                 this.entity = IC.Player.get();
+
+            return this;
         }
 
         public getAttach() { return this.attach; }
@@ -70,14 +80,18 @@ namespace SoundAPI {
         public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
 
         //Updatable
-        protected tick(): void { };
+        protected tick(time: number): void { };
 
-        protected update(): void {
-            this.tick();
+        protected update(time: number): void {
+            this.tick(time);
         };
 
-        public registerUpdatable() {
+        public registerUpdatable(): this {
             this.addClientUpdatable();
+            return this;
         }
     }
 }
+
+EXPORT("PlayerState", PlayerState);
+EXPORT("Attach", Attach);

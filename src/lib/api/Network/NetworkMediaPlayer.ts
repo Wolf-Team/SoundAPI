@@ -12,7 +12,7 @@ namespace SoundAPI {
     }
 
     type MediaPlayerEntityType = NetworkEntityType<NetworkMediaPlayer, MediaPlayerInfo, MediaPlayer>;
-    export class NetworkMediaPlayer extends NetworkPlayer<MediaPlayerInfo> {
+    export class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
         protected static entityType: MediaPlayerEntityType = (() => {
             const type: MediaPlayerEntityType = new NetworkEntityType("network_media_player");
             type.setClientListSetupListener((list, target, entity) => {
@@ -32,12 +32,14 @@ namespace SoundAPI {
                     state: target.getState()
                 };
             });
-            type.setClientEntityRemovedListener((target, entity) => {
+            type.setClientEntityRemovedListener((target, entity, object) => {
+                alert(object);
                 //target = From setClientEntityAddedListener((...) => target)
                 target.release();
             })
             type.setClientEntityAddedListener((entity, packet) => {
                 //packet = From setClientAddPacketFactory((...) => packet)
+                alert(Network.inRemoteWorld());
                 const player = NetworkMediaPlayer.getPlayer(packet);
                 player.registerUpdatable();
                 return player;
@@ -91,16 +93,16 @@ namespace SoundAPI {
                 throw new Error("Sourse not set");
 
             this.nEntity.send<{ sid: string }>("play", { sid });
-            super.play();
+            return super.play();
         }
 
         public pause() {
             this.nEntity.send<{}>("pause", {});
-            super.pause();
+            return super.pause();
         }
         public stop() {
             this.nEntity.send<{}>("stop", {});
-            super.stop();
+            return super.stop();
         }
 
         protected getNetworkEntity() {

@@ -8,10 +8,10 @@
     SoundAPI 3.0 ©WolfTeam ( https://vk.com/wolf___team )
  */
 LIBRARY({
-    name: "SoundAPI",
-    version: 30,
-    api: "CoreEngine",
-    shared: true
+  name: "SoundAPI",
+  version: 30,
+  api: "CoreEngine",
+  shared: true
 });
 
 const jSoundPool = android.media.SoundPool;

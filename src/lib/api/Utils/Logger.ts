@@ -1,4 +1,4 @@
-namespace SoundAPI.Logger {
+namespace Utils.Logger {
     const TAG = "SoundAPI";
 
     export function Log(message: string, tag?: string) {

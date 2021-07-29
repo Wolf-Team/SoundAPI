@@ -1,3 +1,5 @@
 header.ts
 
 api/**/*.ts
+
+footer.ts
