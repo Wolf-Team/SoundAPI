@@ -37,7 +37,7 @@ namespace Utils {
      * @param source - Coordinates of the sound source
      * @param listener - Pointer of the audio listener entity
      */
-    export function getVolume(volume: Volume, radius: number, source: Vector, listener?: number): Volume;
+    export function calcVolume(volume: Volume, radius: number, source: Vector, listener?: number): Volume;
     /**
      * 
      * @param volume - Initial volume
@@ -45,8 +45,8 @@ namespace Utils {
      * @param source - Pointer of the audio source entity
      * @param listener - Pointer of the audio listener entity
      */
-    export function getVolume(volume: Volume, radius: number, source: number, listener?: number): Volume;
-    export function getVolume(volume: Volume, radius: number, source: number | Vector, listener: number = Player.get()): Volume {
+    export function calcVolume(volume: Volume, radius: number, source: number, listener?: number): Volume;
+    export function calcVolume(volume: Volume, radius: number, source: number | Vector, listener: number = Player.get()): Volume {
         radius -= MIN_RADUIS;
 
         if (typeof source == "number")

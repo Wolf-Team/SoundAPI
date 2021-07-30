@@ -46,10 +46,10 @@ class SoundPlayer extends SoundAPI.Player {
         const attach = this.getAttach();
         switch (attach) {
             case Attach.ENTITY:
-                volume = Utils.getVolume(volume, this.getRadius(), this.getEntity());
+                volume = Utils.calcVolume(volume, this.getRadius(), this.getEntity());
                 break;
             case Attach.COORDS:
-                volume = Utils.getVolume(volume, this.getRadius(), this.getPosition());
+                volume = Utils.calcVolume(volume, this.getRadius(), this.getPosition());
                 break;
         }
 
