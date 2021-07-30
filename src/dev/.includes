@@ -1,1 +1,3 @@
-*.ts
+header.ts
+
+Client/*.ts
