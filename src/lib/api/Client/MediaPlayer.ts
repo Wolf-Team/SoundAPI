@@ -68,8 +68,15 @@ class MediaPlayer extends SoundAPI.Player {
     protected calcVolume() {
         let volume: Utils.Volume = Utils.getMusicVolume(this.getVolume());
 
-        if (this.getAttach() != Attach.PLAYER)
-            volume = Utils.getVolume(volume, this.getRadius(), this.getPosition(), Player.getPosition());
+        const attach = this.getAttach();
+        switch (attach) {
+            case Attach.ENTITY:
+                volume = Utils.getVolume(volume, this.getRadius(), this.getEntity());
+                break;
+            case Attach.COORDS:
+                volume = Utils.getVolume(volume, this.getRadius(), this.getPosition());
+                break;
+        }
 
         return volume;
     }

@@ -30,10 +30,31 @@ namespace Utils {
         right: number;
     }
 
-    /* Неправильно считается звук */
-    export function getVolume(volume: Volume, radius: number, sourcePosition: Vector, listenerPosition: Vector): Volume {
+    /**
+     * 
+     * @param volume - Initial volume
+     * @param radius - The radius of the source's audibility
+     * @param source - Coordinates of the sound source
+     * @param listener - Pointer of the audio listener entity
+     */
+    export function getVolume(volume: Volume, radius: number, source: Vector, listener?: number): Volume;
+    /**
+     * 
+     * @param volume - Initial volume
+     * @param radius - The radius of the source's audibility
+     * @param source - Pointer of the audio source entity
+     * @param listener - Pointer of the audio listener entity
+     */
+    export function getVolume(volume: Volume, radius: number, source: number, listener?: number): Volume;
+    export function getVolume(volume: Volume, radius: number, source: number | Vector, listener: number = Player.get()): Volume {
         radius -= MIN_RADUIS;
-        const distance = Math.max(0, Vector.getDistance(sourcePosition, listenerPosition) - MIN_RADUIS);
+
+        if (typeof source == "number")
+            source = Entity.getPosition(source);
+
+        const listenerPosition = Entity.getPosition(listener);
+
+        const distance = Math.max(0, Vector.getDistance(source, listenerPosition) - MIN_RADUIS);
         const dVolume = Math.max(0, 1 - (distance / radius));
         return { left: volume.left * dVolume, right: volume.right * dVolume };
     }
