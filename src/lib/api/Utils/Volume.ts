@@ -30,10 +30,11 @@ namespace Utils {
         right: number;
     }
 
+    /* Неправильно считается звук */
     export function getVolume(volume: Volume, radius: number, sourcePosition: Vector, listenerPosition: Vector): Volume {
         radius -= MIN_RADUIS;
         const distance = Math.max(0, Vector.getDistance(sourcePosition, listenerPosition) - MIN_RADUIS);
-        const dVolume = 1 - (distance / radius);
+        const dVolume = Math.max(0, 1 - (distance / radius));
         return { left: volume.left * dVolume, right: volume.right * dVolume };
     }
 

@@ -11,7 +11,7 @@ class SoundPlayer extends SoundAPI.Player {
 
     public play(loop: number = SoundLoop.NONE) {
         if (this.startTime == null) {
-            const volume = Utils.getSoundVolume(this.volume);
+            const volume = this.calcVolume();
             const priority = loop == SoundLoop.INFINITE ? 2 : loop == SoundLoop.NONE ? 0 : 1;
             this.streamId = this.soundPool.play(this.soundInfo.id, volume.left, volume.right, priority, loop, 1);
             this.startTime = Debug.sysTime();
@@ -40,6 +40,15 @@ class SoundPlayer extends SoundAPI.Player {
         return super.stop();
     }
 
+    protected calcVolume() {
+        let volume: Utils.Volume = Utils.getSoundVolume(this.getVolume());
+
+        if (this.getAttach() != Attach.PLAYER)
+            volume = Utils.getVolume(volume, this.getRadius(), this.getPosition(), Player.getPosition());
+
+        return volume;
+    }
+
     protected tick(time: number): void {
         if (this.getState() != PlayerState.PLAY) return;
 
@@ -49,7 +58,7 @@ class SoundPlayer extends SoundAPI.Player {
                 return <null>this.stop();
         }
 
-        const volume = Utils.getVolume(Utils.getSoundVolume(this.getVolume()), this.getRadius(), this.getPosition(), Player.getPosition());
+        const volume = this.calcVolume();
         this.soundPool.setVolume(this.streamId, volume.left, volume.right);
     }
 }

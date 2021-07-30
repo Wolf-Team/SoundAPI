@@ -35,7 +35,7 @@ class MediaPlayer extends SoundAPI.Player {
         if (this.path === null)
             throw new Error("Sourse not set");
 
-        const volume = Utils.getMusicVolume(this.getVolume());
+        const volume = this.calcVolume();
         this.media.setVolume(volume.left, volume.right);
 
         this.media.start();
@@ -65,8 +65,19 @@ class MediaPlayer extends SoundAPI.Player {
         this.media.release();
     }
 
+    protected calcVolume() {
+        let volume: Utils.Volume = Utils.getMusicVolume(this.getVolume());
+
+        if (this.getAttach() != Attach.PLAYER)
+            volume = Utils.getVolume(volume, this.getRadius(), this.getPosition(), Player.getPosition());
+
+        return volume;
+    }
+
     protected tick(): void {
-        const volume = Utils.getVolume(Utils.getMusicVolume(this.getVolume()), this.getRadius(), this.getPosition(), Player.getPosition());
+        if (this.getState() != PlayerState.PLAY) return;
+
+        const volume = this.calcVolume();
         this.media.setVolume(volume.left, volume.right);
     }
 }
