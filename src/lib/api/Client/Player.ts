@@ -4,6 +4,9 @@
 enum Attach { PLAYER, ENTITY, COORDS };
 
 enum PlayerState { PLAY, PAUSE, STOP };
+interface PlayerComplateListener {
+    (this: SoundAPI.Player): void;
+}
 
 namespace SoundAPI {
     export abstract class Player extends Utils.Updatable {
@@ -76,6 +79,7 @@ namespace SoundAPI {
         }
         public getEntity() { return this.entity; }
         public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
+        public abstract setOnCompletion(action: PlayerComplateListener): void;
 
         //Updatable
         protected tick(time: number): void { };

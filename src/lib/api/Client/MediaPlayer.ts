@@ -51,6 +51,18 @@ class MediaPlayer extends SoundAPI.Player {
         return super.stop();
     }
 
+    public setLooping(looping: boolean) {
+        this.media.setLooping(looping);
+    }
+
+    public setOnCompletion(action: PlayerComplateListener) {
+        this.media.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener({
+            onCompletion: () => {
+                action.apply(this);
+            }
+        }))
+    }
+
     public getSid() {
         return this.sid;
     }

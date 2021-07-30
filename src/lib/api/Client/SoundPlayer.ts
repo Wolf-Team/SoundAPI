@@ -3,6 +3,7 @@ class SoundPlayer extends SoundAPI.Player {
     protected startTime: number;
     protected pauseTime: number;
     protected loop: number;
+    private completionEvent = () => { };
 
 
     constructor(protected soundPool: jSoundPool, protected soundInfo: SoundInfo) {
@@ -36,9 +37,13 @@ class SoundPlayer extends SoundAPI.Player {
         this.soundPool.stop(this.streamId);
         this.startTime = this.streamId = this.pauseTime = null;
         this.remove = true;
-        alert("stop");
+        this.completionEvent();
         return super.stop();
     }
+
+    public setOnCompletion(action: PlayerComplateListener): void {
+        this.completionEvent = action;
+    };
 
     protected calcVolume() {
         let volume: Utils.Volume = Utils.getSoundVolume(this.getVolume());
