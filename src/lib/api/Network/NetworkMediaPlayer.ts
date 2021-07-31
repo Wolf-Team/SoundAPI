@@ -130,3 +130,4 @@ class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
         return new NetworkEntity<NetworkMediaPlayer>(NetworkMediaPlayer.entityType, this);
     }
 }
+EXPORT("NetworkMediaPlayer", NetworkMediaPlayer);

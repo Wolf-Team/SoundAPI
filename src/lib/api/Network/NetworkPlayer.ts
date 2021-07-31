@@ -3,7 +3,7 @@ interface WorldSource {
     dimension: number
 }
 
-abstract class NetworkPlayer<Server> extends SoundAPI.Player {
+abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
     protected nEntity: NetworkEntity<Server>;
 
     constructor(world: WorldSource, radius?: number);
@@ -42,4 +42,4 @@ abstract class NetworkPlayer<Server> extends SoundAPI.Player {
     }
 }
 
-    // NetworkPlayer.init();
+EXPORT("NetworkPlayer", NetworkPlayer);
