@@ -15,7 +15,8 @@ tryRegister("soundapitest.music", folder + "LikeMe.mp3");
         }
     });
 
-    Callback.addCallback("ItemUse", () => {
+    Callback.addCallback("ItemUse", (coords, item) => {
+        if (item.id != 280) return;
         switch (player.getState()) {
             case PlayerState.STOP:
                 player.play("soundapitest.music");
@@ -27,5 +28,6 @@ tryRegister("soundapitest.music", folder + "LikeMe.mp3");
                 player.pause();
                 break;
         }
+
     })
 })()
