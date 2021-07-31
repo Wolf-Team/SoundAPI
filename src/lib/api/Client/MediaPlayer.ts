@@ -23,6 +23,18 @@ class MediaPlayer extends SoundAPI.Player {
     protected media = new jMediaPlayer();
     protected path: string = null;
     protected sid: string = null;
+    private completionEvent: PlayerComplateListener<this> = () => { };
+
+    constructor() {
+        super();
+        this.media.setOnCompletionListener(new jMediaPlayer.OnCompletionListener({
+            onCompletion: () => {
+                super.stop();
+                this.completionEvent();
+            }
+        }))
+    }
+
     protected setSource(src: string) {
         this.media.reset();
         this.path = src;
@@ -58,12 +70,8 @@ class MediaPlayer extends SoundAPI.Player {
         this.media.setLooping(looping);
     }
 
-        this.media.setOnCompletionListener(new android.media.MediaPlayer.OnCompletionListener({
-            onCompletion: () => {
-                action.apply(this);
-            }
-        }))
     public setOnCompletion(action: PlayerComplateListener<this>) {
+        this.completionEvent = action;
     }
 
     public getSid() {
