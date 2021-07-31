@@ -115,19 +115,6 @@ class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
         return super.play();
     }
 
-    public pause() {
-        this.send("pause", {});
-        return super.pause();
-    }
-    public stop() {
-        this.send("stop", {});
-        return super.stop();
-    }
-
-    public send<Data = any>(name: string, data: Data) {
-        this.nEntity.send<Data>(name, data);
-    }
-
     private completionEvent: PlayerComplateListener<this> = () => { };
     public setOnCompletion(action: PlayerComplateListener<this>): void {
         this.completionEvent = action;

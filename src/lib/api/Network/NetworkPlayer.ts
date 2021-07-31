@@ -11,6 +11,20 @@ abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
     public init() {
         this.nEntity = this.getNetworkEntity();
     }
+
+    public send<Data = any>(name: string, data: Data) {
+        this.nEntity.send<Data>(name, data);
+    }
+
+    public pause() {
+        this.send("pause", {});
+        return super.pause();
+    }
+    public stop() {
+        this.send("stop", {});
+        return super.stop();
+    }
+
     protected update(time: number) {
         if (this.getAttach() == Attach.ENTITY) {
             const coords = this.getPosition();
