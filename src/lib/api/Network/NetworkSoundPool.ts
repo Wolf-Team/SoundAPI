@@ -33,4 +33,8 @@ class NetworkSoundPool {
     public register(sid: string, path: string, priority: number = 1) {
         this.soundPool.register(sid, path, priority);
     }
+
+    public unregister(sid: string) {
+        this.soundPool.unregister(sid);
+    }
 }

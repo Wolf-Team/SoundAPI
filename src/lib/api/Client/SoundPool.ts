@@ -89,6 +89,14 @@ class SoundPool {
             duration: Utils.getDuration(file)
         }
     }
+    public unregister(sid: string) {
+        if (!this.list.hasOwnProperty(sid))
+            throw new Error(`Path "${sid}" was not been registered!`);
+
+        this.soundPool.unload(this.list[sid].id);
+        delete this.list[sid];
+    }
+
     public getPlayer(sid: string) {
         return new SoundPlayer(this.soundPool, this.list[sid])
     }
