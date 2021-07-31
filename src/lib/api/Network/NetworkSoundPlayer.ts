@@ -53,7 +53,6 @@ class NetworkSoundPlayer extends NetworkPlayer<NetworkSoundPlayer>{
         })
 
         type.addServerPacketListener("stop", (target, entity) => {
-            alert("stop");
             entity.remove();
         })
 
