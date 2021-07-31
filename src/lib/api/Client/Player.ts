@@ -5,98 +5,97 @@ enum Attach { PLAYER, ENTITY, COORDS };
 
 enum PlayerState { PLAY, PAUSE, STOP };
 
-interface PlayerComplateListener<T extends SoundAPI.Player = SoundAPI.Player> {
+interface PlayerComplateListener<T extends SoundAPIPlayer = SoundAPIPlayer> {
     (this: T): void
 }
 
-namespace SoundAPI {
-    export abstract class Player extends Utils.Updatable {
-        protected attach: Attach = Attach.PLAYER;
-        protected entity: number = 0;
-        protected coords: Vector = { x: 0, y: 0, z: 0 };
-        protected dimension: number = 0;
-        protected radius: number = 5;
-        protected volume: number = 1;
-        protected state: PlayerState = PlayerState.STOP;
+abstract class SoundAPIPlayer extends Utils.Updatable {
+    protected attach: Attach = Attach.PLAYER;
+    protected entity: number = 0;
+    protected coords: Vector = { x: 0, y: 0, z: 0 };
+    protected dimension: number = 0;
+    protected radius: number = 5;
+    protected volume: number = 1;
+    protected state: PlayerState = PlayerState.STOP;
 
 
-        public play(): this {
-            this.state = PlayerState.PLAY;
-            this.remove = false;
-            return this;
-        }
-        public pause(): this {
-            this.state = PlayerState.PAUSE;
-            return this;
-        }
-        public stop(): this {
-            this.state = PlayerState.STOP;
-            this.remove = true;
-            return this;
-        }
+    public play(): this {
+        this.state = PlayerState.PLAY;
+        this.remove = false;
+        return this;
+    }
+    public pause(): this {
+        this.state = PlayerState.PAUSE;
+        return this;
+    }
+    public stop(): this {
+        this.state = PlayerState.STOP;
+        this.remove = true;
+        return this;
+    }
 
-        public getState() {
-            return this.state;
-        }
+    public getState() {
+        return this.state;
+    }
 
-        public setVolume(volume: number): void { this.volume = volume; };
-        public getVolume(): number { return this.volume; };
+    public setVolume(volume: number): void { this.volume = volume; };
+    public getVolume(): number { return this.volume; };
 
-        public attachToCoord(pos: Vector, dimension: number, radius: number = 5): this {
-            if (!Utils.inWorld())
-                throw new Error("You can attach the Player to the coordinates only in the world.");
+    public attachToCoord(pos: Vector, dimension: number, radius: number = 5): this {
+        if (!Utils.inWorld())
+            throw new Error("You can attach the Player to the coordinates only in the world.");
 
-            this.attach = Attach.COORDS;
-            this.coords = pos;
-            this.dimension = dimension;
-            this.radius = radius;
-            this.registerUpdatable();
-            return this;
-        }
-        public attachToEntity(ent: number, radius: number = 5): this {
-            if (!Utils.inWorld())
-                throw new Error("You can attach the Player to an entity only in the world.");
+        this.attach = Attach.COORDS;
+        this.coords = pos;
+        this.dimension = dimension;
+        this.radius = radius;
+        this.registerUpdatable();
+        return this;
+    }
+    public attachToEntity(ent: number, radius: number = 5): this {
+        if (!Utils.inWorld())
+            throw new Error("You can attach the Player to an entity only in the world.");
 
-            if (ent == IC.Player.get()) return this.attachToPlayer();
+        if (ent == IC.Player.get()) return this.attachToPlayer();
 
-            this.attach = Attach.ENTITY;
-            this.entity = ent;
-            this.radius = radius;
-            this.registerUpdatable();
-            return this;
-        }
-        public attachToPlayer(): this {
-            this.attach = Attach.PLAYER;
-            if (World.isWorldLoaded())
-                this.entity = IC.Player.get();
+        this.attach = Attach.ENTITY;
+        this.entity = ent;
+        this.radius = radius;
+        this.registerUpdatable();
+        return this;
+    }
+    public attachToPlayer(): this {
+        this.attach = Attach.PLAYER;
+        if (World.isWorldLoaded())
+            this.entity = IC.Player.get();
 
-            return this;
-        }
+        return this;
+    }
 
-        public getAttach() { return this.attach; }
-        public getPosition() {
-            return this.attach == Attach.ENTITY ? Entity.getPosition(this.entity) : this.coords;
-        }
-        public getDimension() {
-            return this.attach == Attach.ENTITY ? Entity.getDimension(this.entity) : this.dimension;
-        }
-        public getEntity() { return this.entity; }
-        public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
-        public abstract setOnCompletion(action: PlayerComplateListener): void;
+    public getAttach() { return this.attach; }
+    public getPosition() {
+        return this.attach == Attach.ENTITY ? Entity.getPosition(this.entity) : this.coords;
+    }
+    public getDimension() {
+        return this.attach == Attach.ENTITY ? Entity.getDimension(this.entity) : this.dimension;
+    }
+    public getEntity() { return this.entity; }
+    public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
+    public abstract setOnCompletion(action: PlayerComplateListener): void;
 
-        //Updatable
-        protected tick(time: number): void { };
+    //Updatable
+    protected tick(time: number): void { };
 
-        protected update(time: number): void {
-            this.tick(time);
-        };
+    protected update(time: number): void {
+        this.tick(time);
+    };
 
-        public registerUpdatable(): this {
-            this.addClientUpdatable();
-            return this;
-        }
+    public registerUpdatable(): this {
+        this.addClientUpdatable();
+        return this;
     }
 }
 
 EXPORT("PlayerState", PlayerState);
 EXPORT("Attach", Attach);
+EXPORT("SoundAPIPlayer", SoundAPIPlayer);

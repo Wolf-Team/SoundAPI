@@ -1,1 +1,0 @@
-EXPORT("SoundAPI", SoundAPI);
