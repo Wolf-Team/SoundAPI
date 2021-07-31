@@ -26,11 +26,11 @@ abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
         return super.stop();
     }
 
-    public attachToCoord(pos: Vector, dimension: number, radius: number = 5): this {
+    public attachToCoord(pos: Vector, dimension: number, radius: number = DEFAULT_RADIUS): this {
         this.send("attachToCoord", { pos, dimension, radius });
         return super.attachToCoord(pos, dimension, radius);
     }
-    public attachToEntity(ent: number, radius: number = 5): this {
+    public attachToEntity(ent: number, radius: number = DEFAULT_RADIUS): this {
         this.send("attachToEntity", { ent, radius });
         return super.attachToEntity(ent, radius);
     }

@@ -41,7 +41,7 @@ abstract class SoundAPIPlayer extends Utils.Updatable {
     public setVolume(volume: number): void { this.volume = volume; };
     public getVolume(): number { return this.volume; };
 
-    public attachToCoord(pos: Vector, dimension: number, radius: number = 5): this {
+    public attachToCoord(pos: Vector, dimension: number, radius: number = DEFAULT_RADIUS): this {
         if (!Utils.inWorld())
             throw new Error("You can attach the Player to the coordinates only in the world.");
 
@@ -52,7 +52,7 @@ abstract class SoundAPIPlayer extends Utils.Updatable {
         this.registerUpdatable();
         return this;
     }
-    public attachToEntity(ent: number, radius: number = 5): this {
+    public attachToEntity(ent: number, radius: number = DEFAULT_RADIUS): this {
         if (!Utils.inWorld())
             throw new Error("You can attach the Player to an entity only in the world.");
 

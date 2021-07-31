@@ -18,7 +18,7 @@ LIBRARY({
 const IC = this;
 
 const MIN_RADUIS = 2;
-
+const DEFAULT_RADIUS = 5;
 interface SoundAPIConfig {
     experementalCalculateVolume: boolean
 }

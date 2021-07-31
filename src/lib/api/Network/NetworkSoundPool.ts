@@ -32,7 +32,7 @@ class NetworkSoundPool {
 
     public play(sid: string, entity: number, radius?: number, loop?: number): NetworkSoundPlayer;
     public play(sid: string, world: WorldSource, radius?: number, loop?: number): NetworkSoundPlayer;
-    public play(sid: string, source: WorldSource | number, radius: number = 5, loop: number = SoundLoop.NONE) {
+    public play(sid: string, source: WorldSource | number, radius: number = DEFAULT_RADIUS, loop: number = SoundLoop.NONE) {
         const player = this.getPlayer(sid)
         if (typeof source == "number")
             player.attachToEntity(source, radius);

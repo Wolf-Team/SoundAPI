@@ -91,7 +91,7 @@ class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
 
     constructor(world: WorldSource, radius?: number);
     constructor(entity: number, radius?: number);
-    constructor(source: WorldSource | number, radius: number = 5) {
+    constructor(source: WorldSource | number, radius: number = DEFAULT_RADIUS) {
         super();
         if (typeof source == "number")
             this.attachToEntity(source, radius);
