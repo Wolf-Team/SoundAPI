@@ -6,7 +6,13 @@ class SoundPlayer extends SoundAPI.Player {
     protected startTime: number;
     protected pauseTime: number;
     protected loop: number;
+    protected timer = new Utils.Timer({
+        endTimer: () => {
+            this.stop();
+        }
+    });
     private completionEvent: PlayerComplateListener<this> = () => { };
+    private duration: number = 0;
 
 
     constructor(protected soundPool: jSoundPool, protected soundInfo: SoundInfo) {
@@ -21,25 +27,27 @@ class SoundPlayer extends SoundAPI.Player {
             this.startTime = Debug.sysTime();
             this.remove = false;
             this.loop = loop;
+            this.duration = this.soundInfo.duration * (this.loop + 1);
+            this.timer.start(this.duration);
         } else {
+            this.timer.start(this.duration - this.startTime + this.pauseTime);
             this.startTime += Debug.sysTime() - this.pauseTime;
             this.soundPool.resume(this.streamId);
         }
-
-        if (Utils.inWorld())
-            this.registerUpdatable();
 
         return super.play();
     }
     public pause() {
         this.soundPool.pause(this.streamId);
         this.pauseTime = Debug.sysTime();
+        this.timer.stop();
         return super.pause();
     }
     public stop() {
         this.soundPool.stop(this.streamId);
         this.startTime = this.streamId = this.pauseTime = null;
         this.remove = true;
+        this.timer.stop();
         this.completionEvent();
         return super.stop();
     }
@@ -66,12 +74,6 @@ class SoundPlayer extends SoundAPI.Player {
 
     protected tick(time: number): void {
         if (this.getState() != PlayerState.PLAY) return;
-
-        if (this.loop != SoundLoop.INFINITE) {
-            const duration = this.soundInfo.duration * (this.loop + 1);
-            if (duration <= time - this.startTime)
-                return <null>this.stop();
-        }
 
         const volume = this.calcVolume();
         this.soundPool.setVolume(this.streamId, volume.left, volume.right);
