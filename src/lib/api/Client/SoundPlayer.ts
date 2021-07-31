@@ -6,7 +6,7 @@ class SoundPlayer extends SoundAPI.Player {
     protected startTime: number;
     protected pauseTime: number;
     protected loop: number;
-    private completionEvent = () => { };
+    private completionEvent: PlayerComplateListener<this> = () => { };
 
 
     constructor(protected soundPool: jSoundPool, protected soundInfo: SoundInfo) {
@@ -44,7 +44,7 @@ class SoundPlayer extends SoundAPI.Player {
         return super.stop();
     }
 
-    public setOnCompletion(action: PlayerComplateListener): void {
+    public setOnCompletion(action: PlayerComplateListener<this>): void {
         this.completionEvent = action;
     };
 

@@ -4,8 +4,9 @@
 enum Attach { PLAYER, ENTITY, COORDS };
 
 enum PlayerState { PLAY, PAUSE, STOP };
-interface PlayerComplateListener {
-    (this: SoundAPI.Player): void;
+
+interface PlayerComplateListener<T extends SoundAPI.Player = SoundAPI.Player> {
+    (this: T): void
 }
 
 namespace SoundAPI {
