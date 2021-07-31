@@ -6,18 +6,6 @@ interface WorldSource {
 abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
     protected nEntity: NetworkEntity<Server>;
 
-    constructor(world: WorldSource, radius?: number);
-    constructor(entity: number, radius?: number);
-    constructor(source: WorldSource | number, radius: number = 5) {
-        super();
-        if (typeof source == "number")
-            this.attachToEntity(source);
-        else
-            this.attachToCoord(source.position, source.dimension);
-
-        this.radius = radius;
-    }
-
     protected abstract getNetworkEntity(): NetworkEntity<Server>;
 
     public init() {
