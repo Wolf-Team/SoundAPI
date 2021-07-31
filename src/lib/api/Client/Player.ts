@@ -5,7 +5,7 @@ enum Attach { PLAYER, ENTITY, COORDS };
 
 enum PlayerState { PLAY, PAUSE, STOP };
 
-interface PlayerComplateListener<T extends SoundAPIPlayer = SoundAPIPlayer> {
+interface PlayerComplateListener<T extends SoundAPIPlayer> {
     (this: T): void
 }
 
@@ -81,7 +81,7 @@ abstract class SoundAPIPlayer extends Utils.Updatable {
     }
     public getEntity() { return this.entity; }
     public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
-    public abstract setOnCompletion(action: PlayerComplateListener): void;
+    public abstract setOnCompletion(action: PlayerComplateListener<this>): void;
 
     //Updatable
     protected tick(time: number): void { };
