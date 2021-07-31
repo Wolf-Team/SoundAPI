@@ -1,3 +1,6 @@
+/// <reference path="SoundPool.ts" />
+
+
 class SoundPlayer extends SoundAPI.Player {
     protected streamId: number;
     protected startTime: number;

@@ -1,3 +1,11 @@
+
+const jSoundPool = android.media.SoundPool;
+type jSoundPool = android.media.SoundPool;
+
+const AudioAttributes = android.media.AudioAttributes;
+const AudioManager = android.media.AudioManager;
+
+
 interface SoundPoolSettings {
     /**
      * For SoundPool before Android API 21

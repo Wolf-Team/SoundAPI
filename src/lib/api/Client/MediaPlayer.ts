@@ -2,6 +2,9 @@
 
 /// <reference path="Player.ts" />
 
+const jMediaPlayer = android.media.MediaPlayer;
+type jMediaPlayer = android.media.MediaPlayer;
+
 class MediaPlayer extends SoundAPI.Player {
     private static list: Dict<string> = {};
     public static register(sid: string, path: string): void {
