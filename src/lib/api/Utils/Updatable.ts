@@ -17,9 +17,11 @@ namespace Utils {
         }
 
         public addServerUpdatable() {
+            this.remove = false;
             IC.Updatable.addUpdatable(this.getUpdatable())
         }
         public addClientUpdatable() {
+            this.remove = false;
             IC.Updatable.addLocalUpdatable(this.getUpdatable())
         }
     }
