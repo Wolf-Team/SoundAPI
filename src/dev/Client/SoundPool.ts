@@ -6,6 +6,5 @@
         const player = pool.getPlayer("soundapitest.shoot");
         player.attachToCoord(coords, Player.getDimension());
         player.play();
-        player.registerUpdatable();
     });
 })()
