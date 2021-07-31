@@ -2,13 +2,16 @@
 
 
 enum Attach { PLAYER, ENTITY, COORDS };
+EXPORT("Attach", Attach);
 
 enum PlayerState { PLAY, PAUSE, STOP };
+EXPORT("PlayerState", PlayerState);
 
 interface PlayerComplateListener<T extends SoundAPIPlayer> {
     (this: T): void
 }
 
+@exportModule
 abstract class SoundAPIPlayer extends Utils.Updatable {
     protected attach: Attach = Attach.PLAYER;
     protected entity: number = 0;
@@ -95,7 +98,3 @@ abstract class SoundAPIPlayer extends Utils.Updatable {
         return this;
     }
 }
-
-EXPORT("PlayerState", PlayerState);
-EXPORT("Attach", Attach);
-EXPORT("SoundAPIPlayer", SoundAPIPlayer);

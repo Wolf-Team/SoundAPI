@@ -3,6 +3,7 @@ interface WorldSource {
     dimension: number
 }
 
+@exportModule
 abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
     protected nEntity: NetworkEntity<Server>;
 
@@ -56,5 +57,3 @@ abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
         return this;
     }
 }
-
-EXPORT("NetworkPlayer", NetworkPlayer);

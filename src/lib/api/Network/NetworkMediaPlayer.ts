@@ -11,6 +11,8 @@ interface MediaPlayerInfo {
 }
 
 type MediaPlayerEntityType = NetworkEntityType<NetworkMediaPlayer, MediaPlayerInfo, MediaPlayer>;
+
+@exportModule
 class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
     protected static readonly entityType: MediaPlayerEntityType = (() => {
         const type: MediaPlayerEntityType = new NetworkEntityType("network_media_player");
@@ -127,4 +129,3 @@ class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
         return new NetworkEntity<NetworkMediaPlayer>(NetworkMediaPlayer.entityType, this);
     }
 }
-EXPORT("NetworkMediaPlayer", NetworkMediaPlayer);

@@ -6,7 +6,8 @@
  |____/ \___/ \__,_|_| |_|\__,_|/_/   \_\|_|    |___|
                                                                 
     SoundAPI 3.0 ©WolfTeam ( https://vk.com/wolf___team )
- */
+    GitHub: https://github.com/Wolf-Team/SoundAPI
+*/
 LIBRARY({
     name: "SoundAPI",
     version: 30,
@@ -19,6 +20,7 @@ const IC = this;
 
 const MIN_RADUIS = 2;
 const DEFAULT_RADIUS = 5;
+EXPORT("DEFAULT_RADIUS", DEFAULT_RADIUS);
 interface SoundAPIConfig {
     experementalCalculateVolume: boolean
 }

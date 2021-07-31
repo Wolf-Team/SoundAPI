@@ -5,6 +5,7 @@
 const jMediaPlayer = android.media.MediaPlayer;
 type jMediaPlayer = android.media.MediaPlayer;
 
+@exportModule
 class MediaPlayer extends SoundAPIPlayer {
     private static list: Dict<string> = {};
 
@@ -119,5 +120,3 @@ class MediaPlayer extends SoundAPIPlayer {
         this.media.setVolume(volume.left, volume.right);
     }
 }
-
-EXPORT("MediaPlayer", MediaPlayer);

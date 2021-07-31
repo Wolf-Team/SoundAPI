@@ -41,6 +41,8 @@ interface SoundInfo {
 enum SoundLoop {
     INFINITE = -1, NONE = 0
 }
+EXPORT("SoundLoop", SoundLoop);
+@exportModule
 class SoundPool {
     protected static initAudioAttributes(type: number = AudioAttributes.CONTENT_TYPE_SONIFICATION, flags?: number) {
         const builder = new AudioAttributes.Builder();
@@ -114,6 +116,3 @@ class SoundPool {
         this.soundPool.release();
     }
 }
-
-EXPORT("SoundLoop", SoundLoop);
-EXPORT("SoundPool", SoundPool);

@@ -1,6 +1,6 @@
 /// <reference path="SoundPool.ts" />
 
-
+@exportModule
 class SoundPlayer extends SoundAPIPlayer {
     protected streamId: number;
     protected startTime: number;
@@ -78,5 +78,3 @@ class SoundPlayer extends SoundAPIPlayer {
         this.soundPool.setVolume(this.streamId, volume.left, volume.right);
     }
 }
-
-EXPORT("SoundPlayer", SoundPlayer);
