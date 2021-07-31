@@ -30,6 +30,19 @@ class NetworkSoundPool {
         return new NetworkSoundPlayer(this.name, sid);
     }
 
+    public play(sid: string, entity: number, radius?: number, loop?: number): NetworkSoundPlayer;
+    public play(sid: string, world: WorldSource, radius?: number, loop?: number): NetworkSoundPlayer;
+    public play(sid: string, source: WorldSource | number, radius: number = 5, loop: number = SoundLoop.NONE) {
+        const player = this.getPlayer(sid)
+        if (typeof source == "number")
+            player.attachToEntity(source, radius);
+        else
+            player.attachToCoord(source.position, source.dimension, radius);
+
+        player.play(loop);
+        return player;
+    }
+
     public register(sid: string, path: string, priority: number = 1) {
         this.soundPool.register(sid, path, priority);
     }

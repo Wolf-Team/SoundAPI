@@ -94,11 +94,9 @@ class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
     constructor(source: WorldSource | number, radius: number = 5) {
         super();
         if (typeof source == "number")
-            this.attachToEntity(source);
+            this.attachToEntity(source, radius);
         else
-            this.attachToCoord(source.position, source.dimension);
-
-        this.radius = radius;
+            this.attachToCoord(source.position, source.dimension, radius);
     }
 
     public getSid() {
