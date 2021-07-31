@@ -12,7 +12,7 @@ interface MediaPlayerInfo {
 
 type MediaPlayerEntityType = NetworkEntityType<NetworkMediaPlayer, MediaPlayerInfo, MediaPlayer>;
 class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
-    protected static entityType: MediaPlayerEntityType = (() => {
+    protected static readonly entityType: MediaPlayerEntityType = (() => {
         const type: MediaPlayerEntityType = new NetworkEntityType("network_media_player");
         type.setClientListSetupListener((list, target, entity) => {
             //target = From new NetworkEntity(type, target)
