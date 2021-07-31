@@ -28,6 +28,5 @@ tryRegister("soundapitest.music", folder + "LikeMe.mp3");
                 player.pause();
                 break;
         }
-
     })
 })()

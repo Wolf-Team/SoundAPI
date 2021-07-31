@@ -61,7 +61,7 @@ class NetworkSoundPlayer extends NetworkPlayer<NetworkSoundPlayer>{
     })();
 
     protected static getPlayer(info: SoundPlayerInfo): SoundPlayer {
-        const player = NetworkSoundPool.get(info.name).getPlayer(info.sid);
+        const player = NetworkSoundPool.getSoundPool(info.name).getPlayer(info.sid);
         switch (info.attach) {
             case Attach.ENTITY:
             case Attach.PLAYER:

@@ -1,18 +1,27 @@
 @exportModule
 class NetworkSoundPool {
-    protected static list: Dict<SoundPool> = {};
+    protected static pools: Dict<SoundPool> = {};
+    protected static list: Dict<NetworkSoundPool> = {};
 
-    public static get(name): SoundPool {
-        return this.list[name]
+    public static getSoundPool(name): SoundPool {
+        return this.pools[name]
     }
 
     public static register(name: string, streams: number, settings?: SoundPoolSettings): NetworkSoundPool {
-        if (this.list.hasOwnProperty(name))
+        if (this.pools.hasOwnProperty(name))
             throw new Error(`NetworkSoundPool with name "${name}" was been register.`);
 
         // Create SoundPool
-        this.list[name] = SoundPool.init(streams, settings);
-        return new NetworkSoundPool(name, this.list[name]);
+        this.pools[name] = SoundPool.init(streams, settings);
+        return this.list[name] = new NetworkSoundPool(name, this.pools[name]);
+    }
+
+    public static get(name: string): NetworkSoundPool {
+        return this.list[name] || null;
+    }
+
+    public static getOrRegister(name: string, streams: number, settings?: SoundPoolSettings) {
+        return this.get(name) || this.register(name, streams, settings);
     }
 
     protected constructor(protected name: string, protected soundPool: SoundPool) { }
