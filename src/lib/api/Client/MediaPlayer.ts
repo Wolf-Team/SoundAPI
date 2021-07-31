@@ -7,12 +7,20 @@ type jMediaPlayer = android.media.MediaPlayer;
 
 class MediaPlayer extends SoundAPIPlayer {
     private static list: Dict<string> = {};
+
     public static register(sid: string, path: string): void {
         if (this.list.hasOwnProperty(sid))
             throw new Error(`Path "${sid}" was been registered!`);
 
         this.list[sid] = path;
     }
+    public static unregister(sid: string): void {
+        if (!this.list.hasOwnProperty(sid))
+            throw new Error(`Path "${sid}" was not been registered!`);
+
+        delete this.list[sid];
+    }
+
     public static get(sid: string): string {
         if (!this.list.hasOwnProperty(sid))
             throw new Error(`Path "${sid} " is not registered!`);
