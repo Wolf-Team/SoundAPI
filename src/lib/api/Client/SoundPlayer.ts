@@ -25,7 +25,6 @@ class SoundPlayer extends SoundAPI.Player {
             const priority = loop == SoundLoop.INFINITE ? 2 : loop == SoundLoop.NONE ? 0 : 1;
             this.streamId = this.soundPool.play(this.soundInfo.id, volume.left, volume.right, priority, loop, 1);
             this.startTime = Debug.sysTime();
-            this.remove = false;
             this.loop = loop;
             this.duration = this.soundInfo.duration * (this.loop + 1);
             this.timer.start(this.duration);
@@ -46,7 +45,6 @@ class SoundPlayer extends SoundAPI.Player {
     public stop() {
         this.soundPool.stop(this.streamId);
         this.startTime = this.streamId = this.pauseTime = null;
-        this.remove = true;
         this.timer.stop();
         this.completionEvent();
         return super.stop();

@@ -84,7 +84,6 @@ class MediaPlayer extends SoundAPI.Player {
 
     public release() {
         this.stop();
-        this.remove = true;
         this.media.release();
     }
 

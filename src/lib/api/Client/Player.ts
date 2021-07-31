@@ -22,6 +22,7 @@ namespace SoundAPI {
 
         public play(): this {
             this.state = PlayerState.PLAY;
+            this.remove = false;
             return this;
         }
         public pause(): this {
@@ -30,6 +31,7 @@ namespace SoundAPI {
         }
         public stop(): this {
             this.state = PlayerState.STOP;
+            this.remove = true;
             return this;
         }
 
