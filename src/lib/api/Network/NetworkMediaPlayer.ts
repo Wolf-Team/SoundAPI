@@ -116,8 +116,9 @@ class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
     }
 
     private completionEvent: PlayerComplateListener<this> = () => { };
-    public setOnCompletion(action: PlayerComplateListener<this>): void {
+    public setOnCompletion(action: PlayerComplateListener<this>) {
         this.completionEvent = action;
+        return this;
     }
 
     private OnCompletion() {

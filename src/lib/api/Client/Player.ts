@@ -81,7 +81,7 @@ abstract class SoundAPIPlayer extends Utils.Updatable {
     }
     public getEntity() { return this.entity; }
     public getRadius() { return Math.max(this.radius, MIN_RADUIS); }
-    public abstract setOnCompletion(action: PlayerComplateListener<this>): void;
+    public abstract setOnCompletion(action: PlayerComplateListener<this>): this;
 
     //Updatable
     protected tick(time: number): void { };

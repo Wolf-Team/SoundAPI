@@ -21,8 +21,6 @@ class NetworkSoundPool {
         return new NetworkSoundPlayer(this.name, sid);
     }
 
-
-
     public register(sid: string, path: string, priority: number = 1) {
         this.soundPool.register(sid, path, priority);
     }

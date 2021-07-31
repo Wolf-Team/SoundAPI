@@ -72,6 +72,7 @@ class MediaPlayer extends SoundAPIPlayer {
 
     public setOnCompletion(action: PlayerComplateListener<this>) {
         this.completionEvent = action;
+        return this;
     }
 
     public getSid() {

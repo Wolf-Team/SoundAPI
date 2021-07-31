@@ -4,7 +4,8 @@
 
     Callback.addCallback("ItemUse", (coords, item, block, isExternal, playerId) => {
         const player = pool.getPlayer("soundapitest.shoot");
-        player.attachToCoord(coords, new PlayerActor(playerId).getDimension());
+        player.attachToCoord(coords, Player.getDimension());
+        player.init();
         player.play();
     });
 })()

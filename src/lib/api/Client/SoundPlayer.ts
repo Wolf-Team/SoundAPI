@@ -44,14 +44,15 @@ class SoundPlayer extends SoundAPIPlayer {
     }
     public stop() {
         this.soundPool.stop(this.streamId);
-        this.startTime = this.streamId = this.pauseTime = null;
+        this.startTime = this.streamId = this.pauseTime = 0;
         this.timer.stop();
         this.completionEvent();
         return super.stop();
     }
 
-    public setOnCompletion(action: PlayerComplateListener<this>): void {
+    public setOnCompletion(action: PlayerComplateListener<this>): this {
         this.completionEvent = action;
+        return this;
     };
 
     protected calcVolume() {
@@ -71,7 +72,7 @@ class SoundPlayer extends SoundAPIPlayer {
     }
 
     protected tick(time: number): void {
-        if (this.getState() != PlayerState.PLAY) return;
+        if (!this.streamId || this.getState() != PlayerState.PLAY) return;
 
         const volume = this.calcVolume();
         this.soundPool.setVolume(this.streamId, volume.left, volume.right);

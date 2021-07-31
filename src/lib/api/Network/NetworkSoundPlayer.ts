@@ -1,6 +1,13 @@
 interface SoundPlayerInfo {
     name: string,
-    sid: string
+
+    attach: Attach,
+    position?: Vector,
+    entity?: number,
+    dimension?: number,
+    radius: number,
+    sid: string,
+    state: PlayerState
 }
 
 type NetworkSoundPlayerEntityType = NetworkEntityType<NetworkSoundPlayer, SoundPlayerInfo, SoundPlayer>;
@@ -22,11 +29,19 @@ class NetworkSoundPlayer extends NetworkPlayer<NetworkSoundPlayer>{
         type.setClientAddPacketFactory(target => {
             return {
                 name: target.name,
-                sid: target.sid
+                attach: target.getAttach(),
+                position: target.getPosition(),
+                entity: target.getEntity(),
+                dimension: target.getDimension(),
+                radius: target.getRadius(),
+                sid: target.sid,
+                state: target.getState()
             }
         });
         type.setClientEntityAddedListener((entity, target) => {
-            return NetworkSoundPool.get(target.name).getPlayer(target.sid)
+            return NetworkSoundPlayer.getPlayer(target).setOnCompletion(() => {
+                entity.send("stop", {});
+            })
         })
 
         type.setClientEntityRemovedListener((target) => {
@@ -37,8 +52,27 @@ class NetworkSoundPlayer extends NetworkPlayer<NetworkSoundPlayer>{
             target.play(data.loop);
         })
 
+        type.addServerPacketListener("stop", (target, entity) => {
+            alert("stop");
+            entity.remove();
+        })
+
         return type;
     })();
+
+    protected static getPlayer(info: SoundPlayerInfo): SoundPlayer {
+        const player = NetworkSoundPool.get(info.name).getPlayer(info.sid);
+        switch (info.attach) {
+            case Attach.ENTITY:
+            case Attach.PLAYER:
+                player.attachToEntity(info.entity, info.radius);
+                break;
+            case Attach.COORDS:
+                player.attachToCoord(info.position, info.dimension, info.radius);
+                break;
+        }
+        return player;
+    }
 
     constructor(protected name: string, protected sid: string) {
         super();
@@ -52,8 +86,9 @@ class NetworkSoundPlayer extends NetworkPlayer<NetworkSoundPlayer>{
     protected getNetworkEntity(): NetworkEntity<this> {
         return new NetworkEntity(NetworkSoundPlayer.entityType, this);
     }
-    public setOnCompletion(action: PlayerComplateListener<this>): void {
+    public setOnCompletion(action: PlayerComplateListener<this>) {
         throw new Error("Method not implemented.");
+        return this;
     }
 
 }

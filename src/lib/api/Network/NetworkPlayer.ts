@@ -13,7 +13,8 @@ abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
     }
 
     public send<Data = any>(name: string, data: Data) {
-        this.nEntity.send<Data>(name, data);
+        if (this.nEntity)
+            this.nEntity.send<Data>(name, data);
     }
 
     public pause() {
@@ -23,6 +24,18 @@ abstract class NetworkPlayer<Server> extends SoundAPIPlayer {
     public stop() {
         this.send("stop", {});
         return super.stop();
+    }
+
+    public attachToCoord(pos: Vector, dimension: number, radius: number = 5): this {
+        this.send("attachToCoord", { pos, dimension, radius });
+        return super.attachToCoord(pos, dimension, radius);
+    }
+    public attachToEntity(ent: number, radius: number = 5): this {
+        this.send("attachToEntity", { ent, radius });
+        return super.attachToEntity(ent, radius);
+    }
+    public attachToPlayer(): this {
+        throw new Error();
     }
 
     protected update(time: number) {
