@@ -5,7 +5,7 @@ namespace Utils {
     export interface FileWatcherModifyEvent {
         (newModifyTime: number, oldModifyTime: number): void
     }
-    export class FileWatcherModify implements TimerHundler {
+    export class FileWatcherModify implements TimerHandler {
         protected _lastModifed: number;
         protected _file: File;
         protected _timer: Timer;
