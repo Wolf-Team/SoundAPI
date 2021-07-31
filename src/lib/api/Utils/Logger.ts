@@ -1,3 +1,6 @@
+/**
+ * Don't export namespace
+ */
 namespace Utils.Logger {
     const TAG = "SoundAPI";
 

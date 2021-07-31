@@ -1,3 +1,6 @@
+/**
+ * Don't export namespace
+ */
 namespace Utils {
     const File = java.io.File;
     type File = java.io.File;

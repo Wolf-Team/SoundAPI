@@ -1,3 +1,6 @@
+/**
+ * Don't export namespace
+ */
 namespace Utils {
     const cacheDurstion: Dict<number> = {}
     function readDuration(file: string) {

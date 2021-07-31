@@ -1,4 +1,4 @@
-# Unreliased
+# PreRelease v3.0
 - Rewrite in TypeScript
 - Add SoundPool
 - Support multiplayer

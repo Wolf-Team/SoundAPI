@@ -1,3 +1,6 @@
+/**
+ * Don't export namespace
+ */
 namespace Utils {
     export abstract class Updatable {
         protected remove: boolean = false;

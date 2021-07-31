@@ -1,3 +1,6 @@
+/**
+ * Don't export namespace
+ */
 namespace Utils {
     const Thread = java.lang.Thread;
     type Thread = java.lang.Thread;

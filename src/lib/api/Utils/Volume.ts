@@ -1,3 +1,6 @@
+/**
+ * Don't export namespace
+ */
 namespace Utils {
     export namespace Volume {
         const settings_path = FileTools.root + "/games/com.mojang/minecraftpe/options.txt";
