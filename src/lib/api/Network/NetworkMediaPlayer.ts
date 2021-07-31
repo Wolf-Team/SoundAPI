@@ -38,7 +38,6 @@ class NetworkMediaPlayer extends NetworkPlayer<NetworkMediaPlayer> {
             player.setOnCompletion(() => {
                 entity.send("stop", {});
             })
-            player.registerUpdatable();
             return player;
         });
 
