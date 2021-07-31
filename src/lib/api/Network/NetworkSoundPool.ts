@@ -1,5 +1,5 @@
+@exportModule
 class NetworkSoundPool {
-
     protected static list: Dict<SoundPool> = {};
 
     public static get(name): SoundPool {

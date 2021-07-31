@@ -40,3 +40,8 @@ function getConfig(): SoundAPIConfig {
 }
 
 const config = getConfig();
+
+function exportModule(constructor: Function) {
+    alert("exportModule:" + constructor.name);
+    EXPORT(constructor.name, constructor);
+}

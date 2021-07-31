@@ -9,7 +9,7 @@ type NetworkSoundPlayerEntityType = NetworkEntityType<NetworkSoundPlayer, SoundP
 namespace NetworkSoundPlayer.Packets {
     export type Play = { loop: number }
 }
-
+@exportModule
 class NetworkSoundPlayer extends NetworkPlayer<NetworkSoundPlayer>{
     protected static readonly entityType: NetworkSoundPlayerEntityType = (() => {
         const type: NetworkSoundPlayerEntityType = new NetworkEntityType("network_sound_player");
