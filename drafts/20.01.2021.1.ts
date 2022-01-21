@@ -1,3 +1,6 @@
+const SoundPool: any = null;
+const MediaPlyer: any = null;
+
 /** SoundPool */
 const pool = SoundPool.getPool("poolName");
 pool.registerSound("uid", "path"); // Register sound for multiplayer
