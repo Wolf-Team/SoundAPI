@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"outFile": "output/SoundAPI.js",
+		"lib": ["ES5"],
+		"typeRoots": ["./decls"],
+		"experimentalDecorators": true
+	},
+	"includes": ["./src/index.ts", "./src/api/*"]
+}
