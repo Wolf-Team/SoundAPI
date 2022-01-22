@@ -2,9 +2,32 @@
 
 class SoundPlayer extends SoundAPIPlayer {
 	private static SoundPool: android.media.SoundPool = null;
-	public static init() {
-		if (this.SoundPool) return;
+	private static initFunctions: Dict<(maxStreams: number) => android.media.SoundPool> = {
+		21: function (maxStreams: number) {
+			const AudioAttributesBuilder = new android.media.AudioAttributes.Builder();
+			AudioAttributesBuilder.setUsage(android.media.AudioAttributes.USAGE_GAME)
+			AudioAttributesBuilder.setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION);
+
+
+
+			const SoundPoolBuilder = new android.media.SoundPool.Builder();
+			SoundPoolBuilder.setMaxStreams(maxStreams);
+			SoundPoolBuilder.setAudioAttributes(AudioAttributesBuilder.build());
+
+			return SoundPoolBuilder.build();
+		},
+		1: function (maxStreams: number) {
+			return new android.media.SoundPool(maxStreams, android.media.AudioManager.STREAM_MUSIC, 0);
+		}
 	}
+
+	public static init(maxStreams: number) {
+		if (this.SoundPool) return;
+		let initFunction = 1;
+		if (android.os.Build.VERSION.SDK_INT >= 21) initFunction = 21;
+		this.SoundPool = this.initFunctions[initFunction](maxStreams);
+	}
+
 	public static load(file: string) {
 		return this.SoundPool.load(file, 0)
 	}
@@ -12,9 +35,6 @@ class SoundPlayer extends SoundAPIPlayer {
 
 	private streamId: number;
 	protected options: PoolMeta;
-	constructor(options: PoolMeta) {
-		super(options);
-	}
 
 	public prepare(): this {
 		return this;
@@ -42,4 +62,5 @@ class SoundPlayer extends SoundAPIPlayer {
 		SoundPlayer.SoundPool.setVolume(this.streamId, volume[0], volume[1]);
 	}
 }
-SoundPlayer.init();
+
+SoundPlayer.init(__config__.getNumber("sound.maxStreams") || 10);

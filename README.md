@@ -1,17 +1,6 @@
 # SoundAPI
  A library for working with sound.
 
-# For test used:
-
-Song: T-Mass & Britt Lari - Like Me [NCS Release]  
-Music provided by NoCopyrightSounds  
-Free Download/Stream: http://ncs.io/LikeMe  
-Watch: http://youtu.be/iQrYoJ5tRV8
-
-Sound: M16 Rifle Shots  
-Sound provided by Freesound  
-Download: https://freesound.org/people/qubodup/sounds/187677/
-
 # Older versions:
 * [SoundAPI v2.3](https://github.com/Wolf-Team/Libraries/blob/master/SoundAPI.js)
 * [SoundAPI v2.2](https://github.com/Wolf-Team/Libraries/blob/60a1247edc14fabfb3cc1c01dc3fe52ab398acd1/SoundAPI.js)
