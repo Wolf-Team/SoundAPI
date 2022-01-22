@@ -39,7 +39,7 @@ interface SoundMeta extends SoundOptions {
 
 interface MediaMeta extends SoundMeta {
 	typePlayer: "player";
-	file: java.io.File;
+	file: string;
 }
 
 interface PoolMeta extends SoundMeta {
@@ -143,7 +143,7 @@ namespace SoundAPI {
 			//mediaplayer
 			sounds[uid] = {
 				typePlayer: "player",
-				file: sourceFile,
+				file: sourceFile.getAbsolutePath(),
 				...options
 			}
 		}
@@ -157,8 +157,7 @@ namespace SoundAPI {
 		if (isPoolMeta(sound)) {
 			return new SoundPlayer(sound);
 		} else {
-			// sound
-			return;
+			return new MediaPlayer(sound);
 		}
 	}
 }

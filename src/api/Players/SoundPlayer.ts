@@ -36,10 +36,7 @@ class SoundPlayer extends SoundAPIPlayer {
 	private streamId: number;
 	protected options: PoolMeta;
 
-	public prepare(): this {
-		return this;
-	}
-	public play(): void {
+	protected _play(): void {
 		const volume = this.calcVolume();
 		this.streamId = SoundPlayer.SoundPool.play(
 			this.options.soundId,
@@ -50,16 +47,20 @@ class SoundPlayer extends SoundAPIPlayer {
 			1
 		)
 	}
-	public pause(): void {
+	protected _resume(): void {
+		const volume = this.calcVolume();
+		SoundPlayer.SoundPool.setVolume(this.streamId, volume[0], volume[1]);
+		SoundPlayer.SoundPool.resume(this.streamId);
+	}
+	protected _pause(): void {
 		SoundPlayer.SoundPool.pause(this.streamId);
 	}
-	public stop(): void {
+	protected _stop(): void {
 		SoundPlayer.SoundPool.stop(this.streamId);
 	}
 
-	public tick(): void {
-		const volume = this.calcVolume();
-		SoundPlayer.SoundPool.setVolume(this.streamId, volume[0], volume[1]);
+	protected _tick(leftVolume: number, rightVolume: number): void {
+		SoundPlayer.SoundPool.setVolume(this.streamId, leftVolume, rightVolume);
 	}
 }
 

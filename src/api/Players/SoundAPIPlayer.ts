@@ -13,6 +13,8 @@ abstract class SoundAPIPlayer {
 	protected target: Target = null;
 	protected radius: number = 0;
 	protected volumeModify: number = 1;
+	private prepared: boolean = false;
+	private paused: boolean = false;
 
 	constructor(protected readonly options: Meta) {
 		this.volume(options.defaultVolume);
@@ -24,12 +26,14 @@ abstract class SoundAPIPlayer {
 	public at(position: Position, radius: number): this;
 	public at(target: Target, radius: number): this;
 	public at(target: Target, radius: number): this {
+		if (this.prepared) throw new ReferenceError("Player was prepared.")
 		this.target = target;
 		this.radius = radius;
 		return this;
 	}
 
 	public volume(volume: number): this {
+		if (this.prepared) throw new ReferenceError("Player was prepared.")
 		// if (volume < this.options.clampVolume.min || volume > this.options.clampVolume.max) {
 		// 	throw new RangeError("Can't set volume because not in clamp");
 		// }
@@ -37,12 +41,38 @@ abstract class SoundAPIPlayer {
 		return this;
 	}
 
-	public abstract prepare(): this;//?
-	public abstract play(): void;
-	public abstract pause(): void;
-	public abstract stop(): void;
+	protected _prepare(): void { };
+	public prepare(): this {
+		this.prepared = true;
+		this._prepare();
+		return this;
+	}
 
-	public calcVolume(): number[] {
+	protected abstract _play(): void;
+	protected abstract _resume(): void;
+	protected abstract _pause(): void;
+	protected abstract _stop(): void;
+
+	public play(): void {
+		if (!this.prepared)
+			this.prepare();
+
+		if (this.paused)
+			this._resume();
+		else
+			this._play();
+	}
+	public pause(): void {
+		this.paused = true;
+
+	}
+	public stop(): void {
+		this.prepared = false;
+		this.paused = false;
+		this._stop();
+	}
+
+	protected calcVolume(): number[] {
 		const volume = [1, 1];
 		if (!this.target)
 			return volume.map(e => e * this.volumeModify);
@@ -61,7 +91,13 @@ abstract class SoundAPIPlayer {
 		const dVolume = Math.max(0, 1 - (distance / this.radius));
 		return volume.map(e => e * dVolume * this.volumeModify);
 	}
-	public abstract tick(): void;
+
+	protected abstract _tick(leftVolume: number, rightVolume: number);
+	public tick(): void {
+		if (this.paused) return;
+		const volume = this.calcVolume();
+		this._tick(volume[0], volume[1]);
+	}
 }
 
 Callback.addCallback("tick", SoundAPIPlayer.tick)
