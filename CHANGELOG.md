@@ -1,7 +1,6 @@
 # PreRelease v3.0
-- Rewrite in TypeScript
-- Add SoundPool
-- Support multiplayer
+- [x] Rewrite in TypeScript
+- [ ] Support multiplayer
 
 # [v2.3](https://github.com/Wolf-Team/Libraries/blob/master/SoundAPI.js) (07.01.2019)
 - Fix shared.
