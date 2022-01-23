@@ -31,12 +31,15 @@ class SoundPlayer extends SoundAPIPlayer {
 	}
 
 
-	private streamId: number;
+	protected streamId: number;
+	protected get SoundPool() {
+		return SoundPlayer.SoundPool
+	};
 	protected options: PoolMeta;
 
 	protected _play(): void {
 		const volume = this.calcVolume();
-		this.streamId = SoundPlayer.SoundPool.play(
+		this.streamId = this.SoundPool.play(
 			this.options.soundId,
 			volume[0],
 			volume[1],
@@ -47,18 +50,18 @@ class SoundPlayer extends SoundAPIPlayer {
 	}
 	protected _resume(): void {
 		const volume = this.calcVolume();
-		SoundPlayer.SoundPool.setVolume(this.streamId, volume[0], volume[1]);
-		SoundPlayer.SoundPool.resume(this.streamId);
+		this.SoundPool.setVolume(this.streamId, volume[0], volume[1]);
+		this.SoundPool.resume(this.streamId);
 	}
 	protected _pause(): void {
-		SoundPlayer.SoundPool.pause(this.streamId);
+		this.SoundPool.pause(this.streamId);
 	}
 	protected _stop(): void {
-		SoundPlayer.SoundPool.stop(this.streamId);
+		this.SoundPool.stop(this.streamId);
 	}
 
 	protected _tick(leftVolume: number, rightVolume: number): void {
-		SoundPlayer.SoundPool.setVolume(this.streamId, leftVolume, rightVolume);
+		this.SoundPool.setVolume(this.streamId, leftVolume, rightVolume);
 	}
 }
 
