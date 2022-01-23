@@ -44,7 +44,7 @@ class SoundPlayer extends SoundAPIPlayer {
 			volume[0],
 			volume[1],
 			0,
-			this.options.loop ? -1 : 0,
+			this.looped ? -1 : 0,
 			1
 		)
 	}

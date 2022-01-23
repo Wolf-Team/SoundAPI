@@ -1,4 +1,5 @@
 # SoundAPI
+![SoundAPI Logo](mod_icon.png)
  A library for working with sound.
 
 ## Changelog

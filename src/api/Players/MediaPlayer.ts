@@ -11,6 +11,7 @@ class MediaPlayer extends SoundAPIPlayer {
 		if (attributes)
 			this.media.setAudioAttributes(attributes);
 		this.media.setDataSource(this.options.file);
+		this.media.setLooping(this.looped);
 		this.media.prepare();
 	}
 	protected _play(): void {

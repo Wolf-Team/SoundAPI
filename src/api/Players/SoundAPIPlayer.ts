@@ -12,25 +12,35 @@ abstract class SoundAPIPlayer {
 	}
 
 	protected target: Target = null;
-	protected radius: number = 0;
-	protected volumeModify: number = 1;
+	protected _distance: number = 16;
+	protected _volume: number = 1;
+	protected _loop: boolean = false;
+	public get looped() {
+		return this._loop;
+	}
 	private prepared: boolean = false;
 	private paused: boolean = false;
 
 	constructor(protected readonly options: Meta) {
-		this.volume(options.defaultVolume);
 		SoundAPIPlayer.players.push(this);
+
+		this.volume(options.defaultVolume)
+			.loop(options.loop)
+			.distance(options.defaultDistance);
 	}
 
 
-	public at(entity: number, radius: number): this;
-	public at(position: Position, radius: number): this;
-	public at(target: Target, radius: number): this;
-	public at(target: Target, radius: number): this {
+	public at(entity: number): this;
+	public at(position: Position): this;
+	public at(target: Target): this;
+	public at(target: Target): this {
 		if (this.prepared) throw new ReferenceError("Player was prepared.")
 		this.target = target;
-		this.radius = radius;
 		return this;
+	}
+	public distance(dist: number) {
+		if (this.prepared) throw new ReferenceError("Player was prepared.")
+		this._distance = dist;
 	}
 
 	public volume(volume: number): this {
@@ -38,7 +48,12 @@ abstract class SoundAPIPlayer {
 		// if (volume < this.options.clampVolume.min || volume > this.options.clampVolume.max) {
 		// 	throw new RangeError("Can't set volume because not in clamp");
 		// }
-		this.volumeModify = volume;
+		this._volume = volume;
+		return this;
+	}
+	public loop(looping: boolean = true): this {
+		if (this.prepared) throw new ReferenceError("Player was prepared.")
+		this._loop = looping;
 		return this;
 	}
 
@@ -77,7 +92,7 @@ abstract class SoundAPIPlayer {
 	protected calcVolume(): number[] {
 		const volume = [1, 1];
 		if (!this.target)
-			return volume.map(e => e * this.volumeModify);
+			return volume.map(e => e * this._volume);
 
 		const source: Position = typeof this.target == "number" ? {
 			...Entity.getPosition(this.target),
@@ -90,8 +105,8 @@ abstract class SoundAPIPlayer {
 		const listenerVector = Player.getPosition();
 
 		const distance = Math.max(0, Vector.getDistance(source, listenerVector) - MIN_RADIUS);
-		const dVolume = Math.max(0, 1 - (distance / this.radius));
-		return volume.map(e => e * dVolume * this.volumeModify);
+		const dVolume = Math.max(0, 1 - (distance / this._distance));
+		return volume.map(e => e * dVolume * this._volume);
 	}
 
 	protected abstract _tick(leftVolume: number, rightVolume: number);

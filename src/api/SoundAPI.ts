@@ -2,9 +2,14 @@ type Range = { min: number; max: number; };
 
 interface SoundAdditiveOptions {
 	/**
-	 * Default sound volume
-	 * @default 1
+	 * Sound hearing distance.
+	 * @default 16
 	 */
+	defaultDistance: number;
+	/**
+	* Default sound volume
+	* @default 1
+	*/
 	defaultVolume: number;
 
 	/**
@@ -19,12 +24,12 @@ interface SoundAdditiveOptions {
 	 */
 	loop: boolean;
 
-
 	/**
 	 * Type sound. Used for setting volume from game settings.
 	 * @default "main"
 	 */
 	type: SoundAPI.Type;
+
 }
 interface SoundOptions extends Partial<SoundAdditiveOptions> {
 	/**
@@ -71,7 +76,8 @@ namespace SoundAPI {
 		defaultVolume: 1,
 		clampVolume: { min: 0, max: 1 },
 		loop: false,
-		type: Type.MAIN
+		type: Type.MAIN,
+		defaultDistance: 16
 	}
 
 	function getSoundOptions(options: SoundOptions): SoundOptions {
@@ -161,5 +167,4 @@ namespace SoundAPI {
 		}
 	}
 }
-
-EXPORT("SoundAPI", SoundAPI);
+ModAPI.registerAPI("SoundAPI", SoundAPI) 

@@ -1,4 +1,4 @@
-Interface writed @SDesya74
+Interface written by @SDesya74
 ```js
 SoundAPI.registerSound("start", {
 	source: "path/to/file.mp3",
