@@ -2,7 +2,7 @@
 ![SoundAPI Dark Logo](git/dark.png#gh-dark-mode-only)
 ![SoundAPI Light Logo](git/light.png#gh-light-mode-only)
 
-A library for working with sound.
+A mod-library for working with sound.
 
 ## Changelog
 Read [Changelog.md](CHANGELOG.md)

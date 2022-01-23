@@ -1,7 +1,7 @@
 {
 	"description": {
-		"ru": "",
-		"en": ""
+		"ru": "Мод-библиотека для работы со звуком.",
+		"en": "A mod-library for working with sound."
 	},
 	"properties": {
 		"maxStreams": {
