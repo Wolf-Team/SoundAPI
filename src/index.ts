@@ -8,9 +8,3 @@
 	SoundAPI 3.0 ©WolfTeam ( https://vk.com/wolf___team )
 	GitHub: https://github.com/Wolf-Team/SoundAPI
 */
-LIBRARY({
-	name: "SoundAPI",
-	version: 300,
-	api: "CoreEngine",
-	shared: false
-});
