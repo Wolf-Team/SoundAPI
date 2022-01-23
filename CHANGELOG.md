@@ -1,5 +1,6 @@
 # PreRelease v3.0
 - [x] Rewrite in TypeScript
+- [x] Auto use MediaPlayer or SoundPool
 - [ ] Support multiplayer
 
 # [v2.3](https://github.com/Wolf-Team/Libraries/blob/master/SoundAPI.js) (07.01.2019)
