@@ -1,0 +1,17 @@
+{
+	"description": {
+		"ru": "",
+		"en": ""
+	},
+	"properties": {
+		"maxStreams": {
+			"name": {
+				"ru": "Максимум потоков для SoundPool",
+				"en": "Maximum streams for SoundPool"
+			},
+			"type": "SeekBar",
+			"min": 1,
+			"max": 50
+		}
+	}
+}
