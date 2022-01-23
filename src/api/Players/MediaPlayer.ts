@@ -4,16 +4,14 @@
 class MediaPlayer extends SoundAPIPlayer {
 
 	protected options: MediaMeta;
-	protected media: android.media.MediaPlayer;
+	protected media = new android.media.MediaPlayer();
 
-	constructor(options: MediaMeta) {
-		super(options);
-		this.media = new android.media.MediaPlayer();
-		this.media.setDataSource(options.file);
-	}
-	protected _prepare(): this {
+	protected _prepare(): void {
+		const attributes = buildAudioAttributes();
+		if (attributes)
+			this.media.setAudioAttributes(attributes);
+		this.media.setDataSource(this.options.file);
 		this.media.prepare();
-		return super.prepare();
 	}
 	protected _play(): void {
 		const volume = this.calcVolume();

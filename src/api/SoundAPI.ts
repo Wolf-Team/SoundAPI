@@ -75,16 +75,16 @@ namespace SoundAPI {
 	}
 
 	function getSoundOptions(options: SoundOptions): SoundOptions {
-		options = Object.assign(defaultOptions, options);
+		options = { ...defaultOptions, ...options };
 		if (!options.source || typeof options.source !== "string")
-			throw "Source not assigned";
+			throw new ReferenceError("Source not assigned");
 
 		if (
 			typeof options.defaultVolume != "number" ||
 			options.defaultVolume < 0 ||
 			options.defaultVolume > 1
 		)
-			throw "defaultVolume was been number >=0 and <= 1";
+			throw new ReferenceError("defaultVolume was been number >=0 and <= 1");
 
 		if (
 			typeof options.clampVolume != "object" ||
@@ -94,14 +94,14 @@ namespace SoundAPI {
 			options.clampVolume.max > 1 ||
 			options.clampVolume.min > options.clampVolume.max
 		)
-			throw "clampVolume was been object {min:(>=0 and <=max), max:(<=1 and >=min)>}";
+			throw new ReferenceError("clampVolume was been object {min:(>=0 and <=max), max:(<=1 and >=min)>}");
 
 		if (typeof options.loop != "boolean")
-			throw "loop was been boolean";
+			throw new ReferenceError("loop was been boolean");
 
 		const types = Object.values(Type);
 		if (!options.type || typeof options.type !== "string" || types.indexOf(options.type) == -1)
-			throw `type was been one from ${types.join(", ")}`;
+			throw new ReferenceError(`type was been one from ${types.join(", ")}`);
 
 		return options;
 	}
@@ -113,14 +113,14 @@ namespace SoundAPI {
 	 * @param {string} uid - Unical ID for sound
 	 * @param {SoundOptions} options - Options sound
 	 */
-	export function registerSound(uid: string, options: SoundOptions) {
+	export function registerSound(uid: string, options: SoundOptions): void {
 		if (sounds.hasOwnProperty(uid)) throw new RangeError(`Sound "${uid}" was been registered.`);
 
 		try {
 			options = getSoundOptions(options);
 		} catch (e) {
-			if (typeof e == "string")
-				throw new InvalidOptions(uid, e);
+			if (e instanceof Error)
+				throw new InvalidOptions(uid, e.message);
 			else
 				throw e
 		}

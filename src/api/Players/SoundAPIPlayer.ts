@@ -6,8 +6,9 @@ const MIN_RADIUS = 2;
 
 abstract class SoundAPIPlayer {
 	private static players: SoundAPIPlayer[] = [];
+
 	public static tick() {
-		this.players.forEach(player => player.tick());
+		SoundAPIPlayer.players.forEach(player => player.tick());
 	}
 
 	protected target: Target = null;
@@ -43,6 +44,7 @@ abstract class SoundAPIPlayer {
 
 	protected _prepare(): void { };
 	public prepare(): this {
+		if (this.prepared) return this;
 		this.prepared = true;
 		this._prepare();
 		return this;
