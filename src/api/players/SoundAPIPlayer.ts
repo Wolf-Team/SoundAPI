@@ -107,14 +107,14 @@ abstract class SoundAPIPlayer {
 	protected abstract _stop(): void;
 
 	/**
-	 * Start or resume playing sound.
+	 * Start playing sound.
 	 */
 	public play(): void {
 		if (!this.prepared)
 			this.prepare();
 
 		if (this.paused)
-			this._resume();
+			this.resume();
 		else
 			this._play();
 	}
@@ -122,13 +122,23 @@ abstract class SoundAPIPlayer {
 	 * Pause playing sound.
 	 */
 	public pause(): void {
+		if (!this.prepared || this.paused) return;
 		this.paused = true;
-
+		this._pause();
+	}
+	/**
+	 * Resume playing sound.
+	 */
+	public resume() {
+		if (!this.paused) return;
+		this.paused = false;
+		this._resume();
 	}
 	/**
 	 * Stop playing sound.
 	 */
 	public stop(): void {
+		if (!this.prepared) return;
 		this.prepared = false;
 		this.paused = false;
 		this._stop();
@@ -156,7 +166,7 @@ abstract class SoundAPIPlayer {
 
 	protected abstract _tick(leftVolume: number, rightVolume: number);
 	private tick(): void {
-		if (this.paused) return;
+		if (!this.prepared || this.paused) return;
 		const volume = this.calcVolume();
 		this._tick(volume[0], volume[1]);
 	}
