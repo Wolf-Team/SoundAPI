@@ -61,9 +61,9 @@ class SoundPlayer extends SoundAPIPlayer {
 		this.SoundPool.stop(this.streamId);
 	}
 
-	protected _tick(leftVolume: number, rightVolume: number): void {
+	protected _tick(volume: Volume): void {
 		if (this.streamId)
-			this.SoundPool.setVolume(this.streamId, leftVolume, rightVolume);
+			this.SoundPool.setVolume(this.streamId, volume.left, volume.right);
 	}
 }
 

@@ -3,7 +3,10 @@ interface Position extends Vector {
 }
 type Target = number | Position;
 const MIN_RADIUS = 2;
-
+interface Volume {
+	left: number;
+	right: number;
+}
 abstract class SoundAPIPlayer {
 	private static players: SoundAPIPlayer[] = [];
 
@@ -189,33 +192,29 @@ abstract class SoundAPIPlayer {
 		this._stop();
 	}
 
-	protected calcVolume(): number[] {
+	protected calcVolume(): Volume {
 		const multiplyVolume = this._volume * parseFloat(SettingsManager.getSetting("audio_" + this.options.type));
 
-		const volume = [1, 1];
-		if (!this.target)
-			return volume.map(e => e * multiplyVolume);
+		if (!this.target) return { left: multiplyVolume, right: multiplyVolume }
 
-		const source: Position = typeof this.target == "number" ? {
-			...Entity.getPosition(this.target),
-			dimension: Entity.getDimension(this.target)
-		} : this.target;
 
-		if (source.dimension != Player.getDimension())
-			return [0, 0];
+		const dimension = typeof this.target == "number" ? Entity.getDimension(this.target) : this.target.dimension;
+		if (dimension != Player.getDimension()) return { left: 0, right: 0 };
+
+		const position = typeof this.target == "number" ? Entity.getPosition(this.target) : this.target;
 
 		const listenerVector = Player.getPosition();
 
-		const distance = Math.max(0, Vector.getDistance(source, listenerVector));
+		const distance = Math.max(0, Vector.getDistance(position, listenerVector));
 		const dVolume = Math.max(0, 1 - (distance / this._distance));
-		return volume.map(e => e * dVolume * multiplyVolume);
+		const volume = dVolume * multiplyVolume;
+		return { left: volume, right: volume };
 	}
 
-	protected abstract _tick(leftVolume: number, rightVolume: number);
+	protected abstract _tick(volume: Volume): void;
 	private tick(): void {
 		if (!this.prepared || this.paused) return;
-		const volume = this.calcVolume();
-		this._tick(volume[0], volume[1]);
+		this._tick(this.calcVolume());
 	}
 
 	protected send<D>(packet: SoundAPINetwork.NetworkPacket, data: D) {

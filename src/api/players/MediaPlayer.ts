@@ -31,8 +31,8 @@ class MediaPlayer extends SoundAPIPlayer {
 		this.media.release();
 		this.media = null;
 	}
-	protected _tick(leftVolume: number, rightVolume: number): void {
-		this.media.setVolume(leftVolume, rightVolume);
+	protected _tick(volume: Volume): void {
+		this.media.setVolume(volume.left, volume.right);
 	}
 
 }
