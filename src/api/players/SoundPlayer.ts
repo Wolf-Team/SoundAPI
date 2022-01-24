@@ -42,8 +42,8 @@ class SoundPlayer extends SoundAPIPlayer {
 		const volume = this.calcVolume();
 		this.streamId = this.SoundPool.play(
 			this.options.soundId,
-			volume[0],
-			volume[1],
+			volume.left,
+			volume.right,
 			0,
 			this.looped ? -1 : 0,
 			1

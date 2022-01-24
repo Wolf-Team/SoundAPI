@@ -17,7 +17,7 @@ class MediaPlayer extends SoundAPIPlayer {
 	}
 	protected _play(): void {
 		const volume = this.calcVolume();
-		this.media.setVolume(volume[0], volume[1]);
+		this.media.setVolume(volume.left, volume.right);
 		this.media.start();
 	}
 	protected _resume(): void {
