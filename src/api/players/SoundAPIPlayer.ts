@@ -158,13 +158,18 @@ abstract class SoundAPIPlayer {
 	 */
 	public pause(): void {
 		if (!this.prepared || this.paused) return;
+
+		this.send<SoundAPINetwork.SoundData>(SoundAPINetwork.NetworkPacket.Pause, {
+			id: this.networkId
+		});
+
 		this.paused = true;
 		this._pause();
 	}
 	/**
 	 * Resume playing sound.
 	 */
-	public resume() {
+	private resume() {
 		if (!this.paused) return;
 		this.paused = false;
 		this._resume();
@@ -174,6 +179,11 @@ abstract class SoundAPIPlayer {
 	 */
 	public stop(): void {
 		if (!this.prepared) return;
+
+		this.send<SoundAPINetwork.SoundData>(SoundAPINetwork.NetworkPacket.Stop, {
+			id: this.networkId
+		});
+
 		this.prepared = false;
 		this.paused = false;
 		this._stop();

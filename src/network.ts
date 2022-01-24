@@ -6,11 +6,16 @@ namespace SoundAPINetwork {
 	class NetworkSoundPlayerMap {
 		private players: Dict<Dict<SoundAPIPlayer>> = {};
 
-		public getPlayer(sender: number, id: number) {
+		public getPlayer(sender: number, id: number): SoundAPIPlayer {
+			if (!this.players.hasOwnProperty(sender))
+				throw new RangeError("Unknown sender " + sender);
+			if (!this.players[sender].hasOwnProperty(id))
+				throw new RangeError(`Unknown player ${id} from sender ${sender}`);
 
+			return this.players[sender][id];
 		}
 
-		public addPlayer(sender: number, id: number, player: SoundAPIPlayer) {
+		public addPlayer(sender: number, id: number, player: SoundAPIPlayer): SoundAPIPlayer {
 			if (!this.players.hasOwnProperty(sender))
 				this.players[sender] = {};
 
@@ -28,13 +33,16 @@ namespace SoundAPINetwork {
 	}
 
 	export enum NetworkPacket {
-		Play = "soundapi.play"
+		Play = "soundapi.play",
+		Pause = "soundapi.pause",
+		Stop = "soundapi.stop",
 	}
 
-	export interface PlayData {
+	export interface SoundData {
 		/* ID soundplayer */
 		id: number;
-
+	};
+	export interface PlayData extends SoundData {
 		uid: string;
 		target: Target;
 		distance: number;
@@ -46,18 +54,26 @@ namespace SoundAPINetwork {
 
 	Network.addServerPacket<PlayData>(NetworkPacket.Play, (client, data) => {
 		const sender = client.getPlayerUid();
-
-		alert(`[Server] Receive from ${sender}: ${JSON.stringify(data)}`);
-
 		Network.sendToAllClients<DataFromServer<PlayData>>(NetworkPacket.Play, {
 			...data, sender
 		});
 	});
 
-	Network.addClientPacket<DataFromServer<PlayData>>(NetworkPacket.Play, (data) => {
-		alert(`[Client] Receive from Server: ${JSON.stringify(data)}`);
-		alert(`[Client] ${data.sender} == ${Player.get()}`);
+	Network.addServerPacket<SoundData>(NetworkPacket.Pause, (client, data) => {
+		const sender = client.getPlayerUid();
+		Network.sendToAllClients<DataFromServer<SoundData>>(NetworkPacket.Play, {
+			...data, sender
+		});
+	});
 
+	Network.addServerPacket<SoundData>(NetworkPacket.Stop, (client, data) => {
+		const sender = client.getPlayerUid();
+		Network.sendToAllClients<DataFromServer<SoundData>>(NetworkPacket.Play, {
+			...data, sender
+		});
+	});
+
+	Network.addClientPacket<DataFromServer<PlayData>>(NetworkPacket.Play, (data) => {
 		if (data.sender == Player.get()) return;
 		networkSoundPlayerMap.addPlayer(data.sender, data.id,
 			SoundAPI.select(data.uid)
@@ -67,5 +83,15 @@ namespace SoundAPINetwork {
 				.loop(data.loop)
 				.sync(false)
 		).play();
+	});
+
+	Network.addClientPacket<DataFromServer<SoundData>>(NetworkPacket.Pause, (data) => {
+		if (data.sender == Player.get()) return;
+		networkSoundPlayerMap.getPlayer(data.sender, data.id).pause();
+	});
+
+	Network.addClientPacket<DataFromServer<SoundData>>(NetworkPacket.Stop, (data) => {
+		if (data.sender == Player.get()) return;
+		networkSoundPlayerMap.getPlayer(data.sender, data.id).stop();
 	});
 }
