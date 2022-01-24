@@ -173,11 +173,5 @@ namespace SoundAPI {
 		}
 	}
 }
-interface SoundAPI {
-	registerSound(uid: string, options: SoundOptions): void;
-	select(uid: string): SoundAPIPlayer;
-}
-ModAPI.registerAPI("SoundAPI", SoundAPI)
-namespace ModAPI {
-	export declare function addAPICallback(apiName: "SoundAPI", callback: (api: SoundAPI) => void): void;
-}
+
+ModAPI.registerAPI("SoundAPI", SoundAPI);
