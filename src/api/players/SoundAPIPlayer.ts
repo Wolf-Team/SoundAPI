@@ -207,7 +207,7 @@ abstract class SoundAPIPlayer {
 	}
 
 	protected send<D>(packet: SoundAPINetwork.NetworkPacket, data: D) {
-		if (World.isWorldLoaded() || Network.inRemoteWorld())
+		if (this._sync && (World.isWorldLoaded() || Network.inRemoteWorld()))
 			Network.sendToServer<D>(packet, data)
 	}
 }
