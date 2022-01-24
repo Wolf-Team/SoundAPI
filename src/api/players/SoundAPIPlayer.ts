@@ -15,7 +15,7 @@ abstract class SoundAPIPlayer {
 	}
 	private static networkId = 1;
 	protected networkId: number = 0;
-	protected target: Target = null;
+	protected source: Target = null;
 	protected _distance: number = 16;
 	protected _volume: number = 1;
 	protected _sync: boolean = true;
@@ -78,7 +78,7 @@ abstract class SoundAPIPlayer {
 	public at(target: Target): this;
 	public at(target: Target): this {
 		if (this.prepared) throw new ReferenceError("Player was prepared.")
-		this.target = target;
+		this.source = target;
 		return this;
 	}
 
@@ -148,7 +148,7 @@ abstract class SoundAPIPlayer {
 			loop: this._loop,
 			volume: this._volume,
 			distance: this._distance,
-			target: this.target
+			target: this.source
 		});
 
 		if (this.paused)
@@ -192,22 +192,16 @@ abstract class SoundAPIPlayer {
 		this._stop();
 	}
 
-	protected simpleCalc(position: Vector, multiplyVolume: number): Volume {
-		const listenerPosition = Player.getPosition();
-
-		const distance = Math.max(0, Vector.getDistance(position, listenerPosition));
+	protected simpleCalc(sourcePosition: Vector, listenerPosition: Vector, multiplyVolume: number): number {
+		const distance = Math.max(0, Vector.getDistance(sourcePosition, listenerPosition));
 		const dVolume = Math.max(0, 1 - (distance / this._distance));
 		const volume = dVolume * multiplyVolume;
-		return { left: volume, right: volume };
+		return volume;
 	}
 
-	protected advancedCalc(position: Vector, multiplyVolume: number): Volume {
-		const playerUid = Player.get();
-		const listenerPosition = Player.getPosition();
-		const lookVector = Entity.getLookVector(playerUid);
-
+	protected advancedCalc(sourcePosition: Vector, listenerPosition: Vector, lookVector: Vector, multiplyVolume: number): Volume {
 		//https://stackoverflow.com/questions/41518021
-		let angle = Math.atan2(position.z - listenerPosition.z, position.x - listenerPosition.x) - Math.atan2(lookVector.z, lookVector.x);
+		let angle = Math.atan2(sourcePosition.z - listenerPosition.z, sourcePosition.x - listenerPosition.x) - Math.atan2(lookVector.z, lookVector.x);
 		if (angle > Math.PI) angle -= 2 * Math.PI;
 		else if (angle < -Math.PI) angle += 2 * Math.PI;
 
@@ -219,9 +213,7 @@ abstract class SoundAPIPlayer {
 		const left = .75 - .5 * k;
 		const right = .75 + .5 * k;
 
-		const distance = Math.max(0, Vector.getDistance(position, listenerPosition));
-		const dVolume = Math.max(0, 1 - (distance / this._distance));
-		const volume = dVolume * multiplyVolume;
+		const volume = this.simpleCalc(sourcePosition, listenerPosition, multiplyVolume);
 
 		return { left: left * volume, right: right * volume };
 	}
@@ -229,16 +221,20 @@ abstract class SoundAPIPlayer {
 	protected calcVolume(): Volume {
 		const multiplyVolume = this._volume * parseFloat(SettingsManager.getSetting("audio_" + this.options.type));
 
-		if (!this.target) return { left: multiplyVolume, right: multiplyVolume }
+		if (!this.source) return { left: multiplyVolume, right: multiplyVolume }
 
 
-		const dimension = typeof this.target == "number" ? Entity.getDimension(this.target) : this.target.dimension;
-		if (dimension != Player.getDimension()) return { left: 0, right: 0 };
+		const sourceDimension = typeof this.source == "number" ? Entity.getDimension(this.source) : this.source.dimension;
+		if (sourceDimension != Player.getDimension()) return { left: 0, right: 0 };
 
-		const position = typeof this.target == "number" ? Entity.getPosition(this.target) : this.target;
+		const sourcePosition = typeof this.source == "number" ? Entity.getPosition(this.source) : this.source;
+		const listenerPosition = Player.getPosition();
 
-		// return this.simpleCalc(position, multiplyVolume);
-		return this.advancedCalc(position, multiplyVolume);
+		// const volume = this.simpleCalc(position, listenerPosition, multiplyVolume);
+		// return { left: volume, right: volume };
+
+		const listenerLookVector = Entity.getLookVector(Player.get());
+		return this.advancedCalc(sourcePosition, listenerPosition, listenerLookVector, multiplyVolume);
 	}
 
 	protected abstract _tick(volume: Volume): void;
