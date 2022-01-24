@@ -4,9 +4,10 @@
 class MediaPlayer extends SoundAPIPlayer {
 
 	protected options: MediaMeta;
-	protected media = new android.media.MediaPlayer();
+	protected media: android.media.MediaPlayer = null;
 
 	protected _prepare(): void {
+		this.media = new android.media.MediaPlayer();
 		const attributes = buildAudioAttributes();
 		if (attributes)
 			this.media.setAudioAttributes(attributes);
@@ -27,6 +28,8 @@ class MediaPlayer extends SoundAPIPlayer {
 	}
 	protected _stop(): void {
 		this.media.stop();
+		this.media.release();
+		this.media = null;
 	}
 	protected _tick(leftVolume: number, rightVolume: number): void {
 		this.media.setVolume(leftVolume, rightVolume);
