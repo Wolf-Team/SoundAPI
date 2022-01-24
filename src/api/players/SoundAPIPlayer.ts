@@ -192,6 +192,40 @@ abstract class SoundAPIPlayer {
 		this._stop();
 	}
 
+	protected simpleCalc(position: Vector, multiplyVolume: number): Volume {
+		const listenerPosition = Player.getPosition();
+
+		const distance = Math.max(0, Vector.getDistance(position, listenerPosition));
+		const dVolume = Math.max(0, 1 - (distance / this._distance));
+		const volume = dVolume * multiplyVolume;
+		return { left: volume, right: volume };
+	}
+
+	protected advancedCalc(position: Vector, multiplyVolume: number): Volume {
+		const playerUid = Player.get();
+		const listenerPosition = Player.getPosition();
+		const lookVector = Entity.getLookVector(playerUid);
+
+		//https://stackoverflow.com/questions/41518021
+		let angle = Math.atan2(position.z - listenerPosition.z, position.x - listenerPosition.x) - Math.atan2(lookVector.z, lookVector.x);
+		if (angle > Math.PI) angle -= 2 * Math.PI;
+		else if (angle < -Math.PI) angle += 2 * Math.PI;
+
+
+		const x = angle / Math.PI;
+		let k = Math.sqrt(0.25 - Math.pow(Math.abs(x) - 0.5, 2));
+		if (x < 0) k *= -1;
+
+		const left = .75 - .5 * k;
+		const right = .75 + .5 * k;
+
+		const distance = Math.max(0, Vector.getDistance(position, listenerPosition));
+		const dVolume = Math.max(0, 1 - (distance / this._distance));
+		const volume = dVolume * multiplyVolume;
+
+		return { left: left * volume, right: right * volume };
+	}
+
 	protected calcVolume(): Volume {
 		const multiplyVolume = this._volume * parseFloat(SettingsManager.getSetting("audio_" + this.options.type));
 
@@ -203,12 +237,8 @@ abstract class SoundAPIPlayer {
 
 		const position = typeof this.target == "number" ? Entity.getPosition(this.target) : this.target;
 
-		const listenerVector = Player.getPosition();
-
-		const distance = Math.max(0, Vector.getDistance(position, listenerVector));
-		const dVolume = Math.max(0, 1 - (distance / this._distance));
-		const volume = dVolume * multiplyVolume;
-		return { left: volume, right: volume };
+		// return this.simpleCalc(position, multiplyVolume);
+		return this.advancedCalc(position, multiplyVolume);
 	}
 
 	protected abstract _tick(volume: Volume): void;
