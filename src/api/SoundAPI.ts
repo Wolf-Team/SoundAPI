@@ -2,6 +2,9 @@
 /// <reference path="../utils/Object.ts" />
 /// <reference path="errors/InvalidOptions.ts" />
 /// <reference path="errors/SourceError.ts" />
+/// <reference path="players/MediaPlayer.ts" />
+/// <reference path="players/SoundPlayer.ts" />
+
 
 
 type Range = { min: number; max: number; };
