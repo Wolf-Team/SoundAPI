@@ -1,3 +1,4 @@
+/// <reference path="./SoundAPIPlayer.ts" />
 // https://developer.android.com/reference/android/media/SoundPool
 
 class SoundPlayer extends SoundAPIPlayer {
