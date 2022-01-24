@@ -8,3 +8,4 @@
 	SoundAPI 3.0 ©WolfTeam ( https://vk.com/wolf___team )
 	GitHub: https://github.com/Wolf-Team/SoundAPI
 */
+IMPORT("SettingsManager");
