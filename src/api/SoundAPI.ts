@@ -1,3 +1,9 @@
+/// <reference path="../utils/File.ts" />
+/// <reference path="../utils/Object.ts" />
+/// <reference path="errors/InvalidOptions.ts" />
+/// <reference path="errors/SourceError.ts" />
+
+
 type Range = { min: number; max: number; };
 interface Dict<value> {
 	[key: string]: value
