@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"outFile": "output/SoundAPI.js",
+		"lib": ["ES5"],
+		"declaration": true
+	},
+	"include": ["decls/**/*", "src/**/*"]
+}
