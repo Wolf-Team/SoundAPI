@@ -159,7 +159,7 @@ abstract class SoundAPIPlayer {
 
 		const listenerVector = Player.getPosition();
 
-		const distance = Math.max(0, Vector.getDistance(source, listenerVector) - MIN_RADIUS);
+		const distance = Math.max(0, Vector.getDistance(source, listenerVector));
 		const dVolume = Math.max(0, 1 - (distance / this._distance));
 		return volume.map(e => e * dVolume * this._volume);
 	}

@@ -32,7 +32,7 @@ class SoundPlayer extends SoundAPIPlayer {
 	}
 
 
-	protected streamId: number;
+	protected streamId: number = 0;
 	protected get SoundPool() {
 		return SoundPlayer.SoundPool
 	};
@@ -62,7 +62,8 @@ class SoundPlayer extends SoundAPIPlayer {
 	}
 
 	protected _tick(leftVolume: number, rightVolume: number): void {
-		this.SoundPool.setVolume(this.streamId, leftVolume, rightVolume);
+		if (this.streamId)
+			this.SoundPool.setVolume(this.streamId, leftVolume, rightVolume);
 	}
 }
 
