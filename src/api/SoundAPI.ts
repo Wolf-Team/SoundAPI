@@ -129,16 +129,24 @@ namespace SoundAPI {
 
 
 	const sounds: Dict<Meta> = {};
+
+	/**
+	 * Register sound in system with default settings
+	 * @param {string} uid - Unical ID for sound
+	 * @param {string} source - path to sound
+	 */
+	export function registerSound(uid: string, source: string): void;
 	/**
 	 * Register sound in system
 	 * @param {string} uid - Unical ID for sound
 	 * @param {SoundOptions} options - Options sound
 	 */
-	export function registerSound(uid: string, options: SoundOptions): void {
+	export function registerSound(uid: string, options: SoundOptions): void;
+	export function registerSound(uid: string, options: SoundOptions | string): void {
 		if (sounds.hasOwnProperty(uid)) throw new RangeError(`Sound "${uid}" was been registered.`);
 
 		try {
-			options = getSoundOptions(options);
+			options = getSoundOptions(typeof options == "string" ? { source: options } : options);
 		} catch (e) {
 			if (e instanceof Error)
 				throw new InvalidOptions(uid, e.message);
