@@ -190,9 +190,11 @@ abstract class SoundAPIPlayer {
 	}
 
 	protected calcVolume(): number[] {
+		const multiplyVolume = this._volume * parseFloat(SettingsManager.getSetting("audio_" + this.options.type));
+
 		const volume = [1, 1];
 		if (!this.target)
-			return volume.map(e => e * this._volume);
+			return volume.map(e => e * multiplyVolume);
 
 		const source: Position = typeof this.target == "number" ? {
 			...Entity.getPosition(this.target),
@@ -206,7 +208,7 @@ abstract class SoundAPIPlayer {
 
 		const distance = Math.max(0, Vector.getDistance(source, listenerVector));
 		const dVolume = Math.max(0, 1 - (distance / this._distance));
-		return volume.map(e => e * dVolume * this._volume);
+		return volume.map(e => e * dVolume * multiplyVolume);
 	}
 
 	protected abstract _tick(leftVolume: number, rightVolume: number);
