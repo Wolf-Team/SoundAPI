@@ -7,6 +7,11 @@ A mod-library for working with sound.
 ## Changelog
 Read [Changelog.md](CHANGELOG.md)
 
+## Usage
+
+### Demo
+[Demo SoundAPI](https://github.com/Wolf-Team/Demo-SoundAPI)
+
 ## Older versions:
 * [SoundAPI v2.3](https://github.com/Wolf-Team/Libraries/blob/master/SoundAPI.js)
 * [SoundAPI v2.2](https://github.com/Wolf-Team/Libraries/blob/60a1247edc14fabfb3cc1c01dc3fe52ab398acd1/SoundAPI.js)

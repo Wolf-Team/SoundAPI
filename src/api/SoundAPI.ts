@@ -56,7 +56,6 @@ interface SoundMeta extends SoundOptions {
 
 interface MediaMeta extends SoundMeta {
 	typePlayer: "player";
-	file: string;
 }
 
 interface PoolMeta extends SoundMeta {
@@ -149,19 +148,14 @@ namespace SoundAPI {
 
 		const size = sourceFile.length();
 		if (size <= 0xFFFFF) {
-			//soundpool
-			const pool: android.media.SoundPool = null;
-
 			sounds[uid] = {
 				typePlayer: "pool",
 				soundId: SoundPlayer.load(options.source),
 				...options
 			}
 		} else {
-			//mediaplayer
 			sounds[uid] = {
 				typePlayer: "player",
-				file: sourceFile.getAbsolutePath(),
 				...options
 			}
 		}
