@@ -5,8 +5,6 @@
 /// <reference path="players/MediaPlayer.ts" />
 /// <reference path="players/SoundPlayer.ts" />
 
-
-
 type Range = { min: number; max: number; };
 interface Dict<value> {
 	[key: string]: value
@@ -42,6 +40,11 @@ interface SoundAdditiveOptions {
 	 */
 	type: SoundAPI.Type;
 
+	/**
+	 * Sync player in multiplayer
+	 * @default true
+	 */
+	sync: boolean;
 }
 interface SoundOptions extends Partial<SoundAdditiveOptions> {
 	/**
@@ -88,7 +91,8 @@ namespace SoundAPI {
 		clampVolume: { min: 0, max: 1 },
 		loop: false,
 		type: Type.MAIN,
-		defaultDistance: 16
+		defaultDistance: 16,
+		sync: true
 	}
 
 	function getSoundOptions(options: SoundOptions): SoundOptions {
@@ -167,9 +171,9 @@ namespace SoundAPI {
 
 		const sound = sounds[uid];
 		if (isPoolMeta(sound)) {
-			return new SoundPlayer(sound);
+			return new SoundPlayer(uid, sound);
 		} else {
-			return new MediaPlayer(sound);
+			return new MediaPlayer(uid, sound);
 		}
 	}
 }

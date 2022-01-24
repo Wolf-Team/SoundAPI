@@ -10,10 +10,12 @@ abstract class SoundAPIPlayer {
 	public static tick() {
 		SoundAPIPlayer.players.forEach(player => player.tick());
 	}
-
+	private static networkId = 1;
+	protected networkId: number = 0;
 	protected target: Target = null;
 	protected _distance: number = 16;
 	protected _volume: number = 1;
+	protected _sync: boolean = true;
 	protected _loop: boolean = false;
 	public get looped() {
 		return this._loop;
@@ -21,12 +23,36 @@ abstract class SoundAPIPlayer {
 	private prepared: boolean = false;
 	private paused: boolean = false;
 
-	constructor(protected readonly options: Meta) {
+	constructor(protected readonly uid: string, protected readonly options: Meta) {
 		SoundAPIPlayer.players.push(this);
-
 		this.volume(options.defaultVolume)
 			.loop(options.loop)
+			.sync(options.sync)
 			.distance(options.defaultDistance);
+	}
+
+	/**
+	 * Enable sync player in multiplayer
+	 * @returns {this} this player
+	 */
+	public sync(): this;
+	/**
+	 * Disable sync player in multiplayer
+	 * @returns {this} this player
+	 */
+	public sync(sync: false): this;
+
+	/**
+	 * Enable/disable sync player in multiplayer
+	 * @returns {this} this player
+	 */
+	public sync(sync: boolean): this;
+	public sync(sync: boolean = true): this {
+		if (this.prepared) throw new ReferenceError("Player was prepared.")
+		this._sync = sync;
+		if (this.networkId == 0)
+			this.networkId = SoundAPIPlayer.networkId++;
+		return this;
 	}
 
 	/**
@@ -113,6 +139,15 @@ abstract class SoundAPIPlayer {
 		if (!this.prepared)
 			this.prepare();
 
+		this.send<SoundAPINetwork.PlayData>(SoundAPINetwork.NetworkPacket.Play, {
+			id: this.networkId,
+			uid: this.uid,
+			loop: this._loop,
+			volume: this._volume,
+			distance: this._distance,
+			target: this.target
+		});
+
 		if (this.paused)
 			this.resume();
 		else
@@ -169,6 +204,11 @@ abstract class SoundAPIPlayer {
 		if (!this.prepared || this.paused) return;
 		const volume = this.calcVolume();
 		this._tick(volume[0], volume[1]);
+	}
+
+	protected send<D>(packet: SoundAPINetwork.NetworkPacket, data: D) {
+		if (World.isWorldLoaded() || Network.inRemoteWorld())
+			Network.sendToServer<D>(packet, data)
 	}
 }
 
