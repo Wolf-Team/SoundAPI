@@ -1,4 +1,7 @@
 type Range = { min: number; max: number; };
+interface Dict<value> {
+	[key: string]: value
+}
 
 interface SoundAdditiveOptions {
 	/**
