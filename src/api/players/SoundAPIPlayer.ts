@@ -219,7 +219,9 @@ abstract class SoundAPIPlayer {
 	}
 
 	protected calcVolume(): Volume {
-		const multiplyVolume = this._volume * parseFloat(SettingsManager.getSetting("audio_" + this.options.type));
+		const multiplyVolume = this._volume
+			* parseFloat(SettingsManager.getSetting("audio_" + this.options.type))
+			* parseFloat(SettingsManager.getSetting("audio_main"));
 
 		if (!this.source) return { left: multiplyVolume, right: multiplyVolume }
 

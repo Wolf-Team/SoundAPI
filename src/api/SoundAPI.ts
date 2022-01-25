@@ -36,7 +36,7 @@ interface SoundAdditiveOptions {
 
 	/**
 	 * Type sound. Used for setting volume from game settings.
-	 * @default "main"
+	 * @default "sound"
 	 */
 	type: SoundAPI.Type;
 
@@ -74,7 +74,6 @@ type Meta = PoolMeta | MediaMeta;
 
 namespace SoundAPI {
 	export enum Type {
-		MAIN = "main",
 		SOUND = "sound",
 		MUSIC = "music",
 		AMBIENT = "ambient",
@@ -90,7 +89,7 @@ namespace SoundAPI {
 		defaultVolume: 1,
 		clampVolume: { min: 0, max: 1 },
 		loop: false,
-		type: Type.MAIN,
+		type: Type.SOUND,
 		defaultDistance: 16,
 		sync: true
 	}
