@@ -13,7 +13,7 @@ Read [Changelog.md](CHANGELOG.md)
 Write your launch file
 ```js
 ModAPI.addAPICallback("SoundAPI", function (SoundAPI) {
-	Launch({ SoundAPI: new SoundAPI(MOD_ID) });
+	Launch({ SoundAPI: SoundAPI.init(MOD_ID) });
 });
 ```
 Where `MOD_ID` is the mod string code used to distinguish mods.

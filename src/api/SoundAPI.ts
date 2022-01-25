@@ -78,7 +78,7 @@ function isPoolMeta(meta: Meta): meta is PoolMeta {
 type Meta = PoolMeta | MediaMeta;
 
 class SoundAPI {
-	public constructor(protected readonly mod_id: string) { }
+	private constructor(protected readonly mod_id: string) { }
 
 	private static readonly sounds: Dict<Meta> = {};
 
@@ -174,7 +174,15 @@ class SoundAPI {
 			return new MediaPlayer(uid, sound);
 		}
 	}
+
+	public static init(mod_id: string) {
+		const a = new SoundAPI(mod_id);
+		//@ts-ignore
+		a.Type = SoundAPI.Type;
+		return a;
+	}
 }
+
 
 namespace SoundAPI {
 	export enum Type {
