@@ -24,11 +24,14 @@ namespace SoundAPINetwork {
 		}
 
 		public release() {
-			for (const sender in this.players)
+			for (const sender in this.players) {
 				for (const playerID in this.players[sender]) {
 					const player = this.players[sender][playerID];
 					player.stop();
+					delete this.players[sender][playerID];
 				}
+				delete this.players[sender];
+			}
 		}
 	}
 
@@ -50,7 +53,11 @@ namespace SoundAPINetwork {
 		loop: boolean;
 	};
 
-	let networkSoundPlayerMap = new NetworkSoundPlayerMap();
+
+	const networkSoundPlayerMap = new NetworkSoundPlayerMap();
+	Callback.addCallback("LevelLeft", () => {
+		networkSoundPlayerMap.release();
+	})
 
 	Network.addServerPacket<PlayData>(NetworkPacket.Play, (client, data) => {
 		const sender = client.getPlayerUid();
