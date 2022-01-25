@@ -45,6 +45,11 @@ interface SoundAdditiveOptions {
 	 * @default true
 	 */
 	sync: boolean;
+
+	/**
+	 * @default false
+	 */
+	muteInSolidBlock: boolean;
 }
 interface SoundOptions extends Partial<SoundAdditiveOptions> {
 	/**
@@ -191,7 +196,8 @@ const defaultOptions: Readonly<SoundAdditiveOptions> = {
 	loop: false,
 	type: SoundAPI.Type.SOUND,
 	defaultDistance: 16,
-	sync: true
+	sync: true,
+	muteInSolidBlock: false
 }
 
 ModAPI.registerAPI("SoundAPI", SoundAPI);

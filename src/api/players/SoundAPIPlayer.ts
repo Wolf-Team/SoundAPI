@@ -2,7 +2,7 @@ interface Position extends Vector {
 	dimension: number;
 }
 type Target = number | Position;
-const MIN_RADIUS = 2;
+const MUTABLE_VOLUME = .8;
 interface Volume {
 	left: number;
 	right: number;
@@ -219,7 +219,7 @@ abstract class SoundAPIPlayer {
 	}
 
 	protected calcVolume(): Volume {
-		const multiplyVolume = this._volume
+		let multiplyVolume = this._volume
 			* parseFloat(SettingsManager.getSetting("audio_" + this.options.type))
 			* parseFloat(SettingsManager.getSetting("audio_main"));
 
@@ -230,6 +230,13 @@ abstract class SoundAPIPlayer {
 		if (sourceDimension != Player.getDimension()) return { left: 0, right: 0 };
 
 		const sourcePosition = typeof this.source == "number" ? Entity.getPosition(this.source) : this.source;
+		if (Block.isSolid(BlockSource.getDefaultForDimension(sourceDimension).getBlockId(
+			sourcePosition.x,
+			sourcePosition.y,
+			sourcePosition.z
+		)))
+			multiplyVolume *= MUTABLE_VOLUME;
+
 		const listenerPosition = Player.getPosition();
 
 		// const volume = this.simpleCalc(position, listenerPosition, multiplyVolume);
