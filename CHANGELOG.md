@@ -1,4 +1,12 @@
 # PreRelease v3.0
+## PreRelease 2
+- Changed API initialization method
+- Mutable in solid block
+- support clampVolume
+- Recalc sound for left/right channel
+- Add SoundAPI.registerSound(uid, source) for add sound with default settings
+- Get volume from settings game
+## PreRelease 1
 - Rewrite in TypeScript
 - Auto use MediaPlayer or SoundPool
 - Support multiplayer
