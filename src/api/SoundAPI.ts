@@ -72,29 +72,12 @@ function isPoolMeta(meta: Meta): meta is PoolMeta {
 
 type Meta = PoolMeta | MediaMeta;
 
-namespace SoundAPI {
-	export enum Type {
-		SOUND = "sound",
-		MUSIC = "music",
-		AMBIENT = "ambient",
-		BLOCK = "block",
-		HOSTILE = "hostile",
-		NEUTRAL = "neutral",
-		RECORD = "record",
-		PLAYER = "player",
-		WEATHER = "weather"
-	};
+class SoundAPI {
+	public constructor(protected readonly mod_id: string) { }
 
-	const defaultOptions: SoundAdditiveOptions = {
-		defaultVolume: 1,
-		clampVolume: { min: 0, max: 1 },
-		loop: false,
-		type: Type.SOUND,
-		defaultDistance: 16,
-		sync: true
-	}
+	private static readonly sounds: Dict<Meta> = {};
 
-	function getSoundOptions(options: SoundOptions): SoundOptions {
+	private static getSoundOptions(options: SoundOptions): SoundOptions {
 		options = { ...defaultOptions, ...options };
 		if (!options.source || typeof options.source !== "string")
 			throw new ReferenceError("Source not assigned");
@@ -119,33 +102,35 @@ namespace SoundAPI {
 		if (typeof options.loop != "boolean")
 			throw new ReferenceError("loop was been boolean");
 
-		const types = Object.values(Type);
+		const types = Object.values(SoundAPI.Type);
 		if (!options.type || typeof options.type !== "string" || types.indexOf(options.type) == -1)
 			throw new ReferenceError(`type was been one from ${types.join(", ")}`);
 
 		return options;
 	}
 
-
-	const sounds: Dict<Meta> = {};
+	private getUid(uid: string) {
+		return this.mod_id + "." + uid;
+	}
 
 	/**
 	 * Register sound in system with default settings
 	 * @param {string} uid - Unical ID for sound
 	 * @param {string} source - path to sound
 	 */
-	export function registerSound(uid: string, source: string): void;
+	public registerSound(uid: string, source: string): void;
 	/**
 	 * Register sound in system
 	 * @param {string} uid - Unical ID for sound
 	 * @param {SoundOptions} options - Options sound
 	 */
-	export function registerSound(uid: string, options: SoundOptions): void;
-	export function registerSound(uid: string, options: SoundOptions | string): void {
-		if (sounds.hasOwnProperty(uid)) throw new RangeError(`Sound "${uid}" was been registered.`);
+	public registerSound(uid: string, options: SoundOptions): void;
+	public registerSound(uid: string, options: SoundOptions | string) {
+		if (SoundAPI.sounds.hasOwnProperty(this.getUid(uid))) throw new RangeError(`Sound "${uid}" was been registered.`);
+		uid = this.getUid(uid);
 
 		try {
-			options = getSoundOptions(typeof options == "string" ? { source: options } : options);
+			options = SoundAPI.getSoundOptions(typeof options == "string" ? { source: options } : options);
 		} catch (e) {
 			if (e instanceof Error)
 				throw new InvalidOptions(uid, e.message);
@@ -159,30 +144,54 @@ namespace SoundAPI {
 
 		const size = sourceFile.length();
 		if (size <= 0xFFFFF) {
-			sounds[uid] = {
+			SoundAPI.sounds[uid] = {
 				typePlayer: "pool",
 				soundId: SoundPlayer.load(options.source),
 				...options
 			}
 		} else {
-			sounds[uid] = {
+			SoundAPI.sounds[uid] = {
 				typePlayer: "player",
 				...options
 			}
 		}
 	}
 
-	export function select(uid: string): SoundAPIPlayer {
-		if (!sounds.hasOwnProperty(uid))
+	public select(uid: string): SoundAPIPlayer {
+		if (!SoundAPI.sounds.hasOwnProperty(this.getUid(uid)))
 			throw new RangeError(`Sound "${uid}" not been registered.`);
+		uid = this.getUid(uid);
 
-		const sound = sounds[uid];
+		const sound = SoundAPI.sounds[uid];
 		if (isPoolMeta(sound)) {
 			return new SoundPlayer(uid, sound);
 		} else {
 			return new MediaPlayer(uid, sound);
 		}
 	}
+}
+
+namespace SoundAPI {
+	export enum Type {
+		SOUND = "sound",
+		MUSIC = "music",
+		AMBIENT = "ambient",
+		BLOCK = "block",
+		HOSTILE = "hostile",
+		NEUTRAL = "neutral",
+		RECORD = "record",
+		PLAYER = "player",
+		WEATHER = "weather"
+	};
+}
+
+const defaultOptions: Readonly<SoundAdditiveOptions> = {
+	defaultVolume: 1,
+	clampVolume: { min: 0, max: 1 },
+	loop: false,
+	type: SoundAPI.Type.SOUND,
+	defaultDistance: 16,
+	sync: true
 }
 
 ModAPI.registerAPI("SoundAPI", SoundAPI);
