@@ -101,10 +101,6 @@ abstract class SoundAPIPlayer {
 	public volume(volume: number): this {
 		if (this.prepared) throw new ReferenceError("Player was prepared.")
 		if (volume > 1 || volume < 0) throw new RangeError("volume mast be >= 0 and <= 1.");
-
-		// if (volume < this.options.clampVolume.min || volume > this.options.clampVolume.max) {
-		// 	throw new RangeError("Can't set volume because not in clamp");
-		// }
 		this._volume = volume;
 		return this;
 	}
@@ -239,11 +235,26 @@ abstract class SoundAPIPlayer {
 
 		const listenerPosition = Player.getPosition();
 
-		// const volume = this.simpleCalc(position, listenerPosition, multiplyVolume);
+		// let volume = this.simpleCalc(sourcePosition, listenerPosition, multiplyVolume);
+		// if (volume < this.options.clampVolume.min)
+		// 	volume = this.options.clampVolume.min;
+		// if (volume < this.options.clampVolume.max)
+		// 	volume = this.options.clampVolume.max;
 		// return { left: volume, right: volume };
 
 		const listenerLookVector = Entity.getLookVector(Player.get());
-		return this.advancedCalc(sourcePosition, listenerPosition, listenerLookVector, multiplyVolume);
+		const volume = this.advancedCalc(sourcePosition, listenerPosition, listenerLookVector, multiplyVolume);
+		if (volume.left < this.options.clampVolume.min)
+			volume.left = this.options.clampVolume.min;
+		if (volume.left < this.options.clampVolume.max)
+			volume.left = this.options.clampVolume.max;
+
+		if (volume.right < this.options.clampVolume.min)
+			volume.right = this.options.clampVolume.min;
+		if (volume.right < this.options.clampVolume.max)
+			volume.right = this.options.clampVolume.max;
+
+		return volume;
 	}
 
 	protected abstract _tick(volume: Volume): void;
