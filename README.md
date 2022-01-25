@@ -9,6 +9,63 @@ Read [Changelog.md](CHANGELOG.md)
 
 ## Usage
 
+### Init
+Write your launch file
+```js
+ModAPI.addAPICallback("SoundAPI", function (SoundAPI) {
+	Launch({ SoundAPI: new SoundAPI(MOD_ID) });
+});
+```
+Where `MOD_ID` is the mod string code used to distinguish mods.
+
+### Register Sound
+To register a sound, the Sound.registerSound method is used.
+```js
+SoundAPI.registerSound("sound_name", {
+	//Path to sound file
+	source: __dir__ + "path/to/file.ogg",
+
+	// The parameters below are standard values
+	// Sound hearing distance
+	defaultDistance: 16,
+	//Default sound volume
+	defaultVolume: 1,
+	//Clamp sound volume
+	clampVolume: {mix:0, max:1},
+	//Set default mode looping
+	loop: false,
+	//Type sound. Used for setting volume from game settings.
+	type: SoundAPI.Type.SOUND,
+	//Sync player in multiplayer
+	sync: true,
+	//Mote sound in solid block
+	muteInSolidBlock: false
+});
+```
+To register a sound with standard settings, instead of options, you can specify the path to the file.
+```js
+SoundAPI.registerSound("sound_name", __dir__ + "path/to/file.ogg");
+```
+
+### Play sound
+```js
+SoundAPI.select("sound_name")
+	// Set source sound in coordinates
+	.at({ x:1, y:1, z:1, dimension:Player.getDimension() }) 
+	// Set source sound in entity
+	.at(Player.get()) 
+	// Set the distance to be different from the standard distance specified during registration
+	.distance(5)
+	// Set the volume to be different from the standard volume specified during registration
+	.volume(.5)
+	// Set the loop mode to be different from the standard loop mode specified during registration
+	.loop(false)
+	// Disable multiplayer sync
+	.sync(false)
+	// Play sound
+	.play()
+```
+
 ### Demo
 [Demo SoundAPI](https://github.com/Wolf-Team/Demo-SoundAPI)
 
