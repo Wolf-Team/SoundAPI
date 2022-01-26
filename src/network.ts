@@ -55,9 +55,7 @@ namespace SoundAPINetwork {
 
 
 	const networkSoundPlayerMap = new NetworkSoundPlayerMap();
-	Callback.addCallback("LevelLeft", () => {
-		networkSoundPlayerMap.release();
-	})
+	// Callback.addCallback("LevelLeft", networkSoundPlayerMap.release);
 
 	Network.addServerPacket<PlayData>(NetworkPacket.Play, (client, data) => {
 		const sender = client.getPlayerUid();

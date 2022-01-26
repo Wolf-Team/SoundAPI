@@ -183,6 +183,11 @@ abstract class SoundAPIPlayer {
 			id: this.networkId
 		});
 
+		this.stopWithoutSync();
+	}
+
+	protected stopWithoutSync() {
+		if (!this.prepared) return;
 		this.prepared = false;
 		this.paused = false;
 		this._stop();
@@ -267,6 +272,12 @@ abstract class SoundAPIPlayer {
 		if (this._sync && (World.isWorldLoaded() || Network.inRemoteWorld()))
 			Network.sendToServer<D>(packet, data)
 	}
+
+	public static stopAll() {
+		this.players.forEach(player => player.stopWithoutSync());
+	}
 }
 
 Callback.addCallback("tick", SoundAPIPlayer.tick)
+Callback.addCallback("LevelLeft", SoundAPIPlayer.stopAll)
+Callback.addCallback("LevelLoaded", SoundAPIPlayer.stopAll)
