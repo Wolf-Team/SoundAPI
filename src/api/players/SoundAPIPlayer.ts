@@ -274,7 +274,10 @@ abstract class SoundAPIPlayer {
 	}
 
 	public static stopAll() {
-		this.players.forEach(player => player.stopWithoutSync());
+		for (const i in SoundAPIPlayer.players) {
+			const player = SoundAPIPlayer.players[i];
+			player._sync && player.stopWithoutSync();
+		}
 	}
 }
 
