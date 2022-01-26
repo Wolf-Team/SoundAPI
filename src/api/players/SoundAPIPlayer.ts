@@ -29,9 +29,9 @@ abstract class SoundAPIPlayer {
 	constructor(protected readonly uid: string, protected readonly options: Meta) {
 		SoundAPIPlayer.players.push(this);
 		this.volume(options.defaultVolume)
+			.distance(options.defaultDistance)
 			.loop(options.loop)
-			.sync(options.sync)
-			.distance(options.defaultDistance);
+			.sync(options.sync);
 	}
 
 	/**
@@ -251,12 +251,12 @@ abstract class SoundAPIPlayer {
 		const volume = this.advancedCalc(sourcePosition, listenerPosition, listenerLookVector, multiplyVolume);
 		if (volume.left < this.options.clampVolume.min)
 			volume.left = this.options.clampVolume.min;
-		if (volume.left < this.options.clampVolume.max)
+		if (volume.left > this.options.clampVolume.max)
 			volume.left = this.options.clampVolume.max;
 
 		if (volume.right < this.options.clampVolume.min)
 			volume.right = this.options.clampVolume.min;
-		if (volume.right < this.options.clampVolume.max)
+		if (volume.right > this.options.clampVolume.max)
 			volume.right = this.options.clampVolume.max;
 
 		return volume;
