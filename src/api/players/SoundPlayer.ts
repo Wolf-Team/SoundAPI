@@ -17,8 +17,7 @@ class SoundPlayer extends SoundAPIPlayer {
 	}
 
 	private static getMaxStreams(): number {
-		const maxStreams = __config__.getNumber("sound.maxStreams");
-		if (maxStreams <= 0) return 10;
+		return CONFIG.maxStreams || 10;
 	}
 	public static init(): void {
 		if (this.SoundPool) return;

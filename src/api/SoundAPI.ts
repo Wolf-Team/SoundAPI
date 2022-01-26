@@ -78,7 +78,7 @@ function isPoolMeta(meta: Meta): meta is PoolMeta {
 type Meta = PoolMeta | MediaMeta;
 
 class SoundAPI {
-	private constructor(protected readonly mod_id: string) { }
+	public constructor(protected readonly mod_id: string) { }
 
 	private static readonly sounds: Dict<Meta> = {};
 
@@ -162,10 +162,9 @@ class SoundAPI {
 		}
 	}
 
-	public select(uid: string): SoundAPIPlayer {
-		if (!SoundAPI.sounds.hasOwnProperty(this.getUid(uid)))
+	public static select(uid: string): SoundAPIPlayer {
+		if (!SoundAPI.sounds.hasOwnProperty(uid))
 			throw new RangeError(`Sound "${uid}" not been registered.`);
-		uid = this.getUid(uid);
 
 		const sound = SoundAPI.sounds[uid];
 		if (isPoolMeta(sound)) {
@@ -174,12 +173,12 @@ class SoundAPI {
 			return new MediaPlayer(uid, sound);
 		}
 	}
+	public select(uid: string): SoundAPIPlayer {
+		if (!SoundAPI.sounds.hasOwnProperty(this.getUid(uid)))
+			throw new RangeError(`Sound "${uid}" not been registered.`);
+		uid = this.getUid(uid);
 
-	public static init(mod_id: string) {
-		const a = new SoundAPI(mod_id);
-		//@ts-ignore
-		a.Type = SoundAPI.Type;
-		return a;
+		return SoundAPI.select(uid);
 	}
 }
 
@@ -208,4 +207,4 @@ const defaultOptions: Readonly<SoundAdditiveOptions> = {
 	muteInSolidBlock: false
 }
 
-ModAPI.registerAPI("SoundAPI", SoundAPI);
+EXPORT("SoundAPI", SoundAPI);
