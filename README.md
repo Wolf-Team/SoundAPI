@@ -4,6 +4,13 @@
 
 A library for working with sound.
 
+## Features
+- [x] Auto use SoundPool or MediaPlayer
+- [x] Support multiplayer
+- [x] Auto stoped sync sounds
+- [ ] Effects
+- [ ] Sounds with start/end sounds
+
 ## Changelog
 Read [Changelog.md](CHANGELOG.md)
 
