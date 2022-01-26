@@ -2,7 +2,7 @@
 ![SoundAPI Dark Logo](git/dark.png#gh-dark-mode-only)
 ![SoundAPI Light Logo](git/light.png#gh-light-mode-only)
 
-A mod-library for working with sound.
+A library for working with sound.
 
 ## Changelog
 Read [Changelog.md](CHANGELOG.md)
@@ -10,18 +10,21 @@ Read [Changelog.md](CHANGELOG.md)
 ## Usage
 
 ### Init
-Write your launch file
+Import library in your mod
 ```js
-ModAPI.addAPICallback("SoundAPI", function (SoundAPI) {
-	Launch({ SoundAPI: SoundAPI.init(MOD_ID) });
-});
+IMPORT("SoundAPI");
+```
+
+And create SoundPool
+```js
+const MySoundPool = new SoundAPI("MOD_ID");
 ```
 Where `MOD_ID` is the mod string code used to distinguish mods.
 
 ### Register Sound
 To register a sound, the Sound.registerSound method is used.
 ```js
-SoundAPI.registerSound("sound_name", {
+MySoundPool.registerSound("sound_name", {
 	//Path to sound file
 	source: __dir__ + "path/to/file.ogg",
 
@@ -44,12 +47,12 @@ SoundAPI.registerSound("sound_name", {
 ```
 To register a sound with standard settings, instead of options, you can specify the path to the file.
 ```js
-SoundAPI.registerSound("sound_name", __dir__ + "path/to/file.ogg");
+MySoundPool.registerSound("sound_name", __dir__ + "path/to/file.ogg");
 ```
 
 ### Play sound
 ```js
-SoundAPI.select("sound_name")
+MySoundPool.select("sound_name")
 	// Set source sound in coordinates
 	.at({ x:1, y:1, z:1, dimension:Player.getDimension() }) 
 	// Set source sound in entity
