@@ -1,8 +1,13 @@
 # PreRelease v3.0
+- Add setting "forceOneChannel"
+## PreRelease 3
+- Rejection of the library in the form of a mod
+- Stop sync players when entering/exiting the world
+- Fix calculation volume
 ## PreRelease 2
 - Changed API initialization method
 - Mutable in solid block
-- support clampVolume
+- Support clampVolume
 - Recalc sound for left/right channel
 - Add SoundAPI.registerSound(uid, source) for add sound with default settings
 - Get volume from settings game

@@ -193,11 +193,11 @@ abstract class SoundAPIPlayer {
 		this._stop();
 	}
 
-	protected simpleCalc(sourcePosition: Vector, listenerPosition: Vector, multiplyVolume: number): number {
+	protected simpleCalc(sourcePosition: Vector, listenerPosition: Vector, multiplyVolume: number): Volume {
 		const distance = Math.max(0, Vector.getDistance(sourcePosition, listenerPosition));
 		const dVolume = Math.max(0, 1 - (distance / this._distance));
 		const volume = dVolume * multiplyVolume;
-		return volume;
+		return { left: volume, right: volume };
 	}
 
 	protected advancedCalc(sourcePosition: Vector, listenerPosition: Vector, lookVector: Vector, multiplyVolume: number): Volume {
@@ -216,7 +216,7 @@ abstract class SoundAPIPlayer {
 
 		const volume = this.simpleCalc(sourcePosition, listenerPosition, multiplyVolume);
 
-		return { left: left * volume, right: right * volume };
+		return { left: left * volume.left, right: right * volume.right };
 	}
 
 	protected calcVolume(): Volume {
@@ -240,15 +240,10 @@ abstract class SoundAPIPlayer {
 
 		const listenerPosition = Player.getPosition();
 
-		// let volume = this.simpleCalc(sourcePosition, listenerPosition, multiplyVolume);
-		// if (volume < this.options.clampVolume.min)
-		// 	volume = this.options.clampVolume.min;
-		// if (volume < this.options.clampVolume.max)
-		// 	volume = this.options.clampVolume.max;
-		// return { left: volume, right: volume };
-
 		const listenerLookVector = Entity.getLookVector(Player.get());
-		const volume = this.advancedCalc(sourcePosition, listenerPosition, listenerLookVector, multiplyVolume);
+		const volume = CONFIG.forceOneChannel ?
+			this.simpleCalc(sourcePosition, listenerPosition, multiplyVolume) :
+			this.advancedCalc(sourcePosition, listenerPosition, listenerLookVector, multiplyVolume);
 		if (volume.left < this.options.clampVolume.min)
 			volume.left = this.options.clampVolume.min;
 		if (volume.left > this.options.clampVolume.max)
