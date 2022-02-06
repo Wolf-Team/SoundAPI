@@ -1,20 +1,11 @@
-# PreRelease v3.0
-- Add setting "forceOneChannel"
-## PreRelease 3
-- Rejection of the library in the form of a mod
-- Stop sync players when entering/exiting the world
-- Fix calculation volume
-## PreRelease 2
-- Changed API initialization method
-- Mutable in solid block
-- Support clampVolume
-- Recalc sound for left/right channel
-- Add SoundAPI.registerSound(uid, source) for add sound with default settings
-- Get volume from settings game
-## PreRelease 1
+# Release v3.0.0
 - Rewrite in TypeScript
 - Auto use MediaPlayer or SoundPool
 - Support multiplayer
+- Changed API initialization method
+- Recalc sound for left/right channel
+- Mutable in solid block
+- Stop sync players when entering/exiting the world
 
 # [v2.3](https://github.com/Wolf-Team/Libraries/blob/master/SoundAPI.js) (07.01.2019)
 - Fix shared.
